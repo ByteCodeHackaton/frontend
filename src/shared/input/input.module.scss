@@ -1,0 +1,39 @@
+.wrapper {
+  position: relative;
+  display: block;
+  label {
+    position: absolute;
+    left: 0.75rem;
+    top: 1.15rem;
+    transition: all 0.2s ease;
+    padding: 0 0.2rem;
+    font-size: 0.75rem;
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  input {
+    width: 100%;
+    font-size: 0.75rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(161, 173, 205, 0.5);
+    appearance: none;
+    display: block;
+    &::placeholder {
+      color: transparent;
+      transition: color 0.4s ease;
+    }
+    &:focus {
+      &::placeholder {
+        color: #cbd5e0;
+      }
+    }
+  }
+
+  span {
+    color: red;
+    font-size: 0.75rem;
+    margin-top: 1rem;
+    padding-left: 1rem;
+  }
+}
