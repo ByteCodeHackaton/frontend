@@ -15,7 +15,7 @@ interface OrderPageProps {
 
 const OrderPage: FC<OrderPageProps> = () => {
   return (
-    <>
+    <div style={{ maxWidth: 1140, margin: "auto" }}>
       <h2 className={cls["h2-header"]}>Заявка на сопровождение</h2>
       <div className={cls.wrapper}>
         <div className={cls["col-one"]}>
@@ -92,7 +92,7 @@ const OrderPage: FC<OrderPageProps> = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

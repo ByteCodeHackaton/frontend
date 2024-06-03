@@ -1,0 +1,1 @@
+export { UsersRegistrationPageRoute } from "./UsersRegistrationPage.route"

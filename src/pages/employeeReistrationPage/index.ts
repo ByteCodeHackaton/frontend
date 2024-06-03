@@ -1,0 +1,1 @@
+export {EmployeeReistrationRoute} from "./EmployeeReistrationPage.route"

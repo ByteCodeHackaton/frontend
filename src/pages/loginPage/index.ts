@@ -1,0 +1,1 @@
+export {LoginPageRoute} from "./LoginPage.route"

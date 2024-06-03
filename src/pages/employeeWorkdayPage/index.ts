@@ -1,0 +1,1 @@
+export { EmployeeWorkdayRoute } from "./EmployeeWorkdayPage.route"

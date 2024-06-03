@@ -1,1 +1,1 @@
-export { OrderPage } from "./ui/OrderPage"
+export { OrderPageRoute } from "./ui/OrderPage.route"

@@ -1,0 +1,56 @@
+import {
+  RouterProvider,
+  createBrowserRouter,
+  useRouteError,
+} from "react-router-dom";
+import {
+  MainPageRoute,
+  NotFoundRoute,
+  EmployeeReistrationRoute,
+  EmployeeWorkdayRoute,
+  OrderPageRoute,
+  OrderSplitsPageRoute,
+  PassangerPageRoute,
+  UsersRegistrationPageRoute,
+  LoginPageRoute,
+} from "~/pages";
+import { GenericLayout, GuestLayout, NakedLayout } from "~/pages/layouts";
+
+// https://github.com/remix-run/react-router/discussions/10166
+function BubbleError() {
+  const error = useRouteError();
+  if (error) throw error;
+  return null;
+}
+
+const router = createBrowserRouter([
+  {
+    errorElement: <BubbleError />,
+    children: [
+      {
+        element: <GenericLayout />,
+        children: [
+          MainPageRoute,
+          EmployeeReistrationRoute,
+          EmployeeWorkdayRoute,
+          OrderPageRoute,
+          OrderSplitsPageRoute,
+          PassangerPageRoute,
+          UsersRegistrationPageRoute,
+        ],
+      },
+      {
+        element: <GuestLayout />,
+        children: [LoginPageRoute],
+      },
+      {
+        element: <NakedLayout />,
+        children: [NotFoundRoute],
+      },
+    ],
+  },
+]);
+
+export function BrowserRouter() {
+  return <RouterProvider router={router} />;
+}

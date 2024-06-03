@@ -1,0 +1,1 @@
+export { MainPageRoute } from "./MainPage.router"
