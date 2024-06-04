@@ -3,17 +3,19 @@
 import { NavLink, Outlet } from "react-router-dom";
 // import { sessionQueries } from "~/entities/session";
 import { pathKeys } from "~/shared/lib/react-router";
+import Logo from "~/shared/icons/mm-logo-red.svg?react";
+import { Box, Button, Flex } from "@chakra-ui/react";
+import Door from "~/shared/icons/door.svg?react";
 
 export function GenericLayout() {
   //   const { data } = useSuspenseQuery();
 
   return (
-    <>
+    <Flex direction="column" height="100%">
       {/* {data ? <UserNavigation /> : <GuestNavigation />} */}
       <UserNavigation />
       <Outlet />
-      <Footer />
-    </>
+    </Flex>
   );
 }
 
@@ -22,7 +24,6 @@ export function GuestLayout() {
     <>
       <GuestNavigation />
       <Outlet />
-      <Footer />
     </>
   );
 }
@@ -36,43 +37,87 @@ function UserNavigation() {
 
   return (
     <nav>
-      <div>
-        <ul>
-          <li>
+      <Box>
+        <Flex maxW="960px" mx="auto" justify="space-between" align="center">
+          <NavLink to={pathKeys.home()}>
+            <Logo width="221" height={80} />
+          </NavLink>
+          <NavLink to={pathKeys.login()}>
+            <Button colorScheme="red" rightIcon={<Door color="#fff" />}>
+              Войти
+            </Button>
+          </NavLink>
+        </Flex>
+        <Flex wrap="wrap">
+          <Button
+            textColor="black"
+            backgroundColor="transparent"
+            _hover={{ textColor: "red" }}
+          >
             <NavLink to={pathKeys.home()}>Главный экран</NavLink>
-          </li>
-          <li>
+          </Button>
+          <Button
+            textColor="black"
+            backgroundColor="transparent"
+            _hover={{ textColor: "red" }}
+          >
             <NavLink to={pathKeys.employeeWorkday()}>
               Экран регистрации рабочего дня сотрудника
             </NavLink>
-          </li>
-          <li>
-            <NavLink to={pathKeys.login()}>Экран входа</NavLink>
-          </li>
-          <li>
+          </Button>
+          <Button
+            textColor="black"
+            backgroundColor="transparent"
+            _hover={{ textColor: "red" }}
+          ></Button>
+          <Button
+            textColor="black"
+            backgroundColor="transparent"
+            _hover={{ textColor: "red" }}
+          >
             <NavLink to={pathKeys.order()}>Экран заявки</NavLink>
-          </li>
-          <li>
+          </Button>
+          <Button
+            textColor="black"
+            backgroundColor="transparent"
+            _hover={{ textColor: "red" }}
+          >
             <NavLink to={pathKeys.orders()}>Экран распределения заявок</NavLink>
-          </li>
-          <li>
+          </Button>
+          <Button
+            textColor="black"
+            backgroundColor="transparent"
+            _hover={{ textColor: "red" }}
+          >
             <NavLink to={pathKeys.page404()}>Страница не найдена</NavLink>
-          </li>
-          <li>
+          </Button>
+          <Button
+            textColor="black"
+            backgroundColor="transparent"
+            _hover={{ textColor: "red" }}
+          >
             <NavLink to={pathKeys.passangers()}>Экран пассажира</NavLink>
-          </li>
-          <li>
+          </Button>
+          <Button
+            textColor="black"
+            backgroundColor="transparent"
+            _hover={{ textColor: "red" }}
+          >
             <NavLink to={pathKeys.registerEmployee()}>
               Экран регистрации сотрудников
             </NavLink>
-          </li>
-          <li>
+          </Button>
+          <Button
+            textColor="black"
+            backgroundColor="transparent"
+            _hover={{ textColor: "red" }}
+          >
             <NavLink to={pathKeys.registerUser()}>
               Экран регистрации пользователей программы
             </NavLink>
-          </li>
-        </ul>
-      </div>
+          </Button>
+        </Flex>
+      </Box>
     </nav>
   );
 }
@@ -80,21 +125,18 @@ function UserNavigation() {
 function GuestNavigation() {
   return (
     <nav>
-      <div>
-        <ul>
-          <li>
-            <NavLink to={pathKeys.home()}>Главная страница</NavLink>
-          </li>
-        </ul>
-      </div>
+      <Box>
+        <Flex maxW="960px" mx="auto" justify="space-between" align="center">
+          <NavLink to={pathKeys.home()}>
+            <Logo width="221" height={80} />
+          </NavLink>
+          <NavLink to={pathKeys.login()}>
+            <Button colorScheme="red" rightIcon={<Door color="#fff" />}>
+              Войти
+            </Button>
+          </NavLink>
+        </Flex>
+      </Box>
     </nav>
-  );
-}
-
-function Footer() {
-  return (
-    <footer>
-      <span>Footer</span>
-    </footer>
   );
 }

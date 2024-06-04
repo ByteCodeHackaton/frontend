@@ -15,6 +15,7 @@ import {
   LoginPageRoute,
 } from "~/pages";
 import { GenericLayout, GuestLayout, NakedLayout } from "~/pages/layouts";
+import { AuthProvider } from "./AuthProvider";
 
 // https://github.com/remix-run/react-router/discussions/10166
 function BubbleError() {
@@ -28,7 +29,11 @@ const router = createBrowserRouter([
     errorElement: <BubbleError />,
     children: [
       {
-        element: <GenericLayout />,
+        element: (
+          <AuthProvider>
+            <GenericLayout />
+          </AuthProvider>
+        ),
         children: [
           MainPageRoute,
           EmployeeReistrationRoute,

@@ -1,6 +1,4 @@
 import { FC } from "react";
-import { classNames } from "shared/lib/helpers/className/className";
-import cls from "./Button.module.scss";
 
 interface ButtonProps {
   className?: string;
