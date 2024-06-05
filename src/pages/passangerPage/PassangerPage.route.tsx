@@ -4,6 +4,6 @@ import { createElement } from "react";
 import { PassangerPage } from "./PassangerPage";
 
 export const PassangerPageRoute: RouteObject = {
-  path: pathKeys.passangers(),
+  path: pathKeys.passanger(),
   element: createElement(PassangerPage),
 };

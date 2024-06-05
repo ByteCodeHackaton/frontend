@@ -26,6 +26,9 @@ export const pathKeys = {
   passangers() {
     return pathKeys.root.concat('passangers/');
   },
+  passanger() {
+    return pathKeys.root.concat('passanger/');
+  },
   registerUser() {
     return pathKeys.root.concat('register-user/');
   },

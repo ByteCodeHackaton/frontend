@@ -96,7 +96,7 @@ function UserNavigation() {
             backgroundColor="transparent"
             _hover={{ textColor: "red" }}
           >
-            <NavLink to={pathKeys.passangers()}>Экран пассажира</NavLink>
+            <NavLink to={pathKeys.passanger()}>Экран пассажира</NavLink>
           </Button>
           <Button
             textColor="black"
