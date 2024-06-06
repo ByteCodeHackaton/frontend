@@ -74,10 +74,11 @@ const PassangerPage: React.FC<PassangerPageProps> = () => {
   }
 
   return (
-    <Center w="100vw" position="static">
+    <Center w="100vw">
       <Box
         p={4}
-        minWidth="700px"
+        margin={16}
+        w="100%"
         borderRadius="lg"
         border="1px solid #EDF2F7"
         boxShadow="0 0 1em rgb(1 1 1 / 10%)"

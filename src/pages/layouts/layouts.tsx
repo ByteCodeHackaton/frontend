@@ -49,73 +49,78 @@ function UserNavigation() {
           </NavLink>
         </Flex>
         <Flex wrap="wrap">
-          <Button
-            textColor="black"
-            backgroundColor="transparent"
-            _hover={{ textColor: "red" }}
-          >
-            <NavLink to={pathKeys.home()}>Главный экран</NavLink>
-          </Button>
-          <Button
-            textColor="black"
-            backgroundColor="transparent"
-            _hover={{ textColor: "red" }}
-          >
-            <NavLink to={pathKeys.employeeWorkday()}>
+          <NavLink to={pathKeys.home()}>
+            <Button
+              textColor="black"
+              backgroundColor="transparent"
+              _hover={{ textColor: "red" }}
+            >
+              Главный экран
+            </Button>
+          </NavLink>
+          <NavLink to={pathKeys.employeeWorkday()}>
+            <Button
+              textColor="black"
+              backgroundColor="transparent"
+              _hover={{ textColor: "red" }}
+            >
               Экран регистрации рабочего дня сотрудника
-            </NavLink>
-          </Button>
-          <Button
-            textColor="black"
-            backgroundColor="transparent"
-            _hover={{ textColor: "red" }}
-          ></Button>
-          <Button
-            textColor="black"
-            backgroundColor="transparent"
-            _hover={{ textColor: "red" }}
-          >
-            <NavLink to={pathKeys.order()}>Экран заявки</NavLink>
-          </Button>
-          <Button
-            textColor="black"
-            backgroundColor="transparent"
-            _hover={{ textColor: "red" }}
-          >
-            <NavLink to={pathKeys.orders()}>Экран распределения заявок</NavLink>
-          </Button>
-          <Button
-            textColor="black"
-            backgroundColor="transparent"
-            _hover={{ textColor: "red" }}
-          >
-            <NavLink to={pathKeys.page404()}>Страница не найдена</NavLink>
-          </Button>
-          <Button
-            textColor="black"
-            backgroundColor="transparent"
-            _hover={{ textColor: "red" }}
-          >
-            <NavLink to={pathKeys.passanger()}>Экран пассажира</NavLink>
-          </Button>
-          <Button
-            textColor="black"
-            backgroundColor="transparent"
-            _hover={{ textColor: "red" }}
-          >
-            <NavLink to={pathKeys.registerEmployee()}>
+            </Button>
+          </NavLink>
+          <NavLink to={pathKeys.order()}>
+            <Button
+              textColor="black"
+              backgroundColor="transparent"
+              _hover={{ textColor: "red" }}
+            >
+              Экран заявки
+            </Button>
+          </NavLink>
+          <NavLink to={pathKeys.orders()}>
+            <Button
+              textColor="black"
+              backgroundColor="transparent"
+              _hover={{ textColor: "red" }}
+            >
+              Экран распределения заявок
+            </Button>
+          </NavLink>
+          {/* <NavLink to={pathKeys.page404()}>
+            <Button
+              textColor="black"
+              backgroundColor="transparent"
+              _hover={{ textColor: "red" }}
+            >
+              Страница не найдена
+            </Button>
+          </NavLink> */}
+          <NavLink to={pathKeys.passanger()}>
+            <Button
+              textColor="black"
+              backgroundColor="transparent"
+              _hover={{ textColor: "red" }}
+            >
+              Экран пассажира
+            </Button>
+          </NavLink>
+          <NavLink to={pathKeys.registerEmployee()}>
+            <Button
+              textColor="black"
+              backgroundColor="transparent"
+              _hover={{ textColor: "red" }}
+            >
               Экран регистрации сотрудников
-            </NavLink>
-          </Button>
-          <Button
-            textColor="black"
-            backgroundColor="transparent"
-            _hover={{ textColor: "red" }}
-          >
-            <NavLink to={pathKeys.registerUser()}>
+            </Button>
+          </NavLink>
+          <NavLink to={pathKeys.registerUser()}>
+            <Button
+              textColor="black"
+              backgroundColor="transparent"
+              _hover={{ textColor: "red" }}
+            >
               Экран регистрации пользователей программы
-            </NavLink>
-          </Button>
+            </Button>
+          </NavLink>
         </Flex>
       </Box>
     </nav>
