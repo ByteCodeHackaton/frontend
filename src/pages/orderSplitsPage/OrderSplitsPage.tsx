@@ -6,7 +6,7 @@ interface OrderSplitsPageProps {
 }
 
 const OrderSplitsPage: FC<OrderSplitsPageProps> = () => {
-  return <div>OrderSplitsPage</div>;
+  return <div>OrderSplitsPage Graphics</div>;
 };
 
 export { OrderSplitsPage };
