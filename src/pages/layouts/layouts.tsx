@@ -127,6 +127,15 @@ function UserNavigation() {
                     Регистрация сотрудника
                   </MenuItem>
                 </NavLink>
+                <NavLink to={pathKeys.employees()}>
+                  <MenuItem
+                    textColor="black"
+                    backgroundColor="transparent"
+                    _hover={{ textColor: "red" }}
+                  >
+                    Список сотрудников
+                  </MenuItem>
+                </NavLink>
               </MenuList>
             </Menu>
             <Menu isLazy>

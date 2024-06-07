@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import {
   FormErrorMessage,
   FormLabel,
@@ -25,24 +25,58 @@ import {
   PinInput,
   PinInputField,
   HStack,
+  useToast,
 } from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+import { Detail } from "~/entities/employees/employees.types";
+import { useLazySetEmployeeQuery } from "~/entities/employees/employees.api";
 
 const EmployeeReistrationPage: FC = () => {
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-  } = useForm();
+    control,
+  } = useForm({
+    defaultValues: {
+      date: "",
+      time_work: "07:00-19:00",
+      id: "",
+      fio: "",
+      uchastok: "",
+      smena: "1",
+      rank: "администратор",
+      sex: "male",
+      phone_work: "",
+      phone_personal: "",
+      tab_number: "",
+      type_work: "yes",
+    },
+  });
 
-  async function onSubmit(values) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        resolve();
-      }, 3000);
-    });
-  }
+  const toast = useToast();
+
+  const [sendRequest, { data, isSuccess, isError }] = useLazySetEmployeeQuery();
+
+  const onSubmit = (data: Detail) => {
+    sendRequest(data);
+  };
+
+  useEffect(() => {
+    if (isSuccess)
+      toast({
+        title: "Сотрудник добавлен",
+        status: "success",
+        isClosable: true,
+      });
+    if (isError)
+      toast({
+        title: "Ошибка при добавлении сотрудника",
+        status: "error",
+        isClosable: true,
+      });
+    // console.log(data)
+  }, [isSuccess, isError]);
 
   return (
     <Center w="100vw">
@@ -58,13 +92,13 @@ const EmployeeReistrationPage: FC = () => {
           Регистрация сотрудника
         </Heading>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl isInvalid={Boolean(errors.name)}>
+          <FormControl isInvalid={Boolean(errors.fio)}>
             <FormLabel htmlFor="employee">ФИО сотрудника полностью</FormLabel>
             <Input
-              id="employee"
+              id="fio"
               autoComplete="on"
               placeholder="ФИО сотрудника полностью"
-              {...register("employee", {
+              {...register("fio", {
                 required: "Это поле является обязательным",
                 minLength: {
                   value: 4,
@@ -73,81 +107,98 @@ const EmployeeReistrationPage: FC = () => {
               })}
             />
             <FormErrorMessage>
-              <>{errors.employee && errors.employee.message}</>
+              <>{errors.fio && errors.fio.message}</>
             </FormErrorMessage>
           </FormControl>
           <Center height="12px" />
-          <FormControl isInvalid={Boolean(errors.name)}>
-            <FormLabel htmlFor="employeeTwo">Фамилия и инициалы</FormLabel>
-            <Input
-              id="employeeTwo"
-              autoComplete="on"
-              placeholder="Фамилия и инициалы"
-              {...register("employeeTwo", {
-                required: "Это поле является обязательным",
-                minLength: {
-                  value: 4,
-                  message: "Длина не может быть мешьше 4 символов",
-                },
-              })}
-            />
-            <FormErrorMessage>
-              <>{errors.employeeTwo && errors.employeeTwo.message}</>
-            </FormErrorMessage>
-          </FormControl>
+          <FormLabel htmlFor="employeeTwo">Фамилия и инициалы</FormLabel>
+          <Input
+            id="employeeTwo"
+            autoComplete="on"
+            placeholder="Фамилия и инициалы"
+          />
+
           <Center height="12px" />
           <FormControl>
             <FormLabel>Пол</FormLabel>
-            <RadioGroup defaultValue="1">
-              <Stack spacing={5} direction="row">
-                <Radio colorScheme="red" value="1">
-                  Мужской
-                </Radio>
-                <Radio colorScheme="red" value="2">
-                  Женский
-                </Radio>
-              </Stack>
-            </RadioGroup>
+            <Controller
+              control={control}
+              name="sex"
+              render={({ field: { onChange, value } }) => (
+                <RadioGroup onChange={(value) => onChange(value)} value={value}>
+                  <Stack spacing={5} direction="row">
+                    <Radio colorScheme="red" value="male">
+                      Мужской
+                    </Radio>
+                    <Radio colorScheme="red" value="female">
+                      Женский
+                    </Radio>
+                  </Stack>
+                </RadioGroup>
+              )}
+            />
           </FormControl>
           <Center height="12px" />
           <FormControl>
             <FormLabel>Смена сотрудника</FormLabel>
-            <Select>
-              <option value="option1">1</option>
-              <option value="option2">2</option>
-              <option value="option3">1(Н)</option>
-              <option value="option4">2(Н)</option>
-              <option value="option5">5</option>
-            </Select>
+            <Controller
+              control={control}
+              name="smena"
+              render={({ field: { onChange, value } }) => (
+                <Select onChange={(value) => onChange(value)} value={value}>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="1(Н)">1(Н)</option>
+                  <option value="2(Н)">2(Н)</option>
+                  <option value="5">5</option>
+                </Select>
+              )}
+            />
           </FormControl>
           <Center height="12px" />
           <FormControl>
             <FormLabel>Должность сотрудника</FormLabel>
-            <Select>
-              <option value="option1">администратор</option>
-              <option value="option2">специалист</option>
-              <option value="option3">начальник участка (ЦУ)</option>
-              <option value="option4">старший инспектор (ЦСИ)</option>
-              <option value="option5">оператор (ЦИО)</option>
-              <option value="option6">инспектор (ЦИ)</option>
-            </Select>
+            <Controller
+              control={control}
+              name="rank"
+              render={({ field: { onChange, value } }) => (
+                <Select onChange={(value) => onChange(value)} value={value}>
+                  <option value="администратор">администратор</option>
+                  <option value="специалист">специалист</option>
+                  <option value="начальник участка (ЦУ)">
+                    начальник участка (ЦУ)
+                  </option>
+                  <option value="старший инспектор (ЦСИ)">
+                    старший инспектор (ЦСИ)
+                  </option>
+                  <option value="оператор (ЦИО)">оператор (ЦИО)</option>
+                  <option value="инспектор (ЦИ)">инспектор (ЦИ)</option>
+                </Select>
+              )}
+            />
           </FormControl>
           <Center height="12px" />
           <FormControl>
             <FormLabel>Время работы</FormLabel>
-            <Select>
-              <option value="option1">07:00-19:00</option>
-              <option value="option2">08:00-20:00</option>
-              <option value="option3">20:00-08:00</option>
-              <option value="option4">08:00-17:00</option>
-            </Select>
+            <Controller
+              control={control}
+              name="time_work"
+              render={({ field: { onChange, value } }) => (
+                <Select onChange={(value) => onChange(value)} value={value}>
+                  <option value="07:00-19:00">07:00-19:00</option>
+                  <option value="08:00-20:00">08:00-20:00</option>
+                  <option value="20:00-08:00">20:00-08:00</option>
+                  <option value="08:00-17:00">08:00-17:00</option>
+                </Select>
+              )}
+            />
           </FormControl>
           <Center height="12px" />
           <FormControl>
             <FormLabel>Рабочий телефон</FormLabel>
             <InputGroup>
               <InputLeftAddon>+7</InputLeftAddon>
-              <Input type="tel" placeholder="" />
+              <Input type="tel" placeholder="" {...register("phone_work")} />
             </InputGroup>
           </FormControl>
           <Center height="12px" />
@@ -155,23 +206,37 @@ const EmployeeReistrationPage: FC = () => {
             <FormLabel>Личный телефон</FormLabel>
             <InputGroup>
               <InputLeftAddon>+7</InputLeftAddon>
-              <Input type="tel" placeholder="" />
+              <Input
+                type="tel"
+                placeholder=""
+                {...register("phone_personal")}
+              />
             </InputGroup>
           </FormControl>
           <Center height="12px" />
           <FormControl>
             <FormLabel>Табельный номер</FormLabel>
             <HStack>
-              <PinInput size="md">
-                <PinInputField />
-                <PinInputField />
-                <PinInputField />
-                <PinInputField />
-                <PinInputField />
-                <PinInputField />
-                <PinInputField />
-                <PinInputField />
-              </PinInput>
+              <Controller
+                control={control}
+                name="tab_number"
+                render={({ field: { onChange, value } }) => (
+                  <PinInput
+                    size="md"
+                    onChange={(value) => onChange(value)}
+                    value={value}
+                  >
+                    <PinInputField />
+                    <PinInputField />
+                    <PinInputField />
+                    <PinInputField />
+                    <PinInputField />
+                    <PinInputField />
+                    <PinInputField />
+                    <PinInputField />
+                  </PinInput>
+                )}
+              />
             </HStack>
           </FormControl>
           <Center height="12px" />
@@ -180,16 +245,22 @@ const EmployeeReistrationPage: FC = () => {
               Легкий труд? (сотрудники, которым запрещены определенные действия
               по состоянию здоровья)
             </FormLabel>
-            <RadioGroup defaultValue="1">
-              <Stack spacing={5} direction="row">
-                <Radio colorScheme="red" value="1">
-                  Да
-                </Radio>
-                <Radio colorScheme="red" value="2">
-                  Нет
-                </Radio>
-              </Stack>
-            </RadioGroup>
+            <Controller
+              control={control}
+              name="type_work"
+              render={({ field: { onChange, value } }) => (
+                <RadioGroup onChange={(value) => onChange(value)} value={value}>
+                  <Stack spacing={5} direction="row">
+                    <Radio colorScheme="red" value="yes">
+                      Да
+                    </Radio>
+                    <Radio colorScheme="red" value="no">
+                      Нет
+                    </Radio>
+                  </Stack>
+                </RadioGroup>
+              )}
+            />
           </FormControl>
           <Center>
             <Button

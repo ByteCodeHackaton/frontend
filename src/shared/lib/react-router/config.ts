@@ -14,6 +14,9 @@ export const pathKeys = {
   employeeWorkday() {
     return pathKeys.root.concat('employee-day/');
   },
+  employees() {
+    return pathKeys.root.concat('employees/');
+  },
   order() {
     return pathKeys.root.concat('order/');
   },
