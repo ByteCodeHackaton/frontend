@@ -11,9 +11,6 @@ export const pathKeys = {
   page404() {
     return pathKeys.root.concat('404/');
   },
-  registerEmployee() {
-    return pathKeys.root.concat('register-employee/');
-  },
   employeeWorkday() {
     return pathKeys.root.concat('employee-day/');
   },
@@ -23,13 +20,22 @@ export const pathKeys = {
   orders() {
     return pathKeys.root.concat('orders/');
   },
-  passangers() {
-    return pathKeys.root.concat('passangers/');
+  passengers() {
+    return pathKeys.root.concat('passengers/');
   },
-  passanger() {
-    return pathKeys.root.concat('passanger/');
+  passenger() {
+    return pathKeys.root.concat('passengers/');
+  },
+  passengerById( id : string) {
+      return pathKeys.passenger().concat(id, '/');
   },
   registerUser() {
     return pathKeys.root.concat('register-user/');
+  },
+  registerEmployee() {
+    return pathKeys.root.concat('register-employee/');
+  },
+  registerPassenger() {
+    return pathKeys.root.concat('register-passenger/');
   },
 };

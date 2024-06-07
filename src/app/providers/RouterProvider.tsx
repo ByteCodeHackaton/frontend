@@ -10,12 +10,13 @@ import {
   EmployeeWorkdayRoute,
   OrderPageRoute,
   OrderSplitsPageRoute,
-  PassangerPageRoute,
   UsersRegistrationPageRoute,
   LoginPageRoute,
+  PassengersPageRoute,
+  PassangerRegistrationPageRoute,
 } from "~/pages";
 import { GenericLayout, GuestLayout, NakedLayout } from "~/pages/layouts";
-import { AuthProvider } from "./AuthProvider";
+// import { AuthProvider } from "./AuthProvider";
 
 // https://github.com/remix-run/react-router/discussions/10166
 function BubbleError() {
@@ -40,8 +41,9 @@ const router = createBrowserRouter([
           EmployeeWorkdayRoute,
           OrderPageRoute,
           OrderSplitsPageRoute,
-          PassangerPageRoute,
+          PassangerRegistrationPageRoute,
           UsersRegistrationPageRoute,
+          PassengersPageRoute,
         ],
       },
       {

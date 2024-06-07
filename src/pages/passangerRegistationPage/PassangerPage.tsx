@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import {
   FormErrorMessage,
   FormLabel,
@@ -28,9 +28,12 @@ import {
   Stack,
   Radio,
   Divider,
+  useToast,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IPhones } from "./PassangerPage.types";
+import { useLazySetPassengerQuery } from "~/entities/passengers/passengers.api";
+import { Detail } from "~/entities/passengers/types";
 
 interface PassangerPageProps {
   className?: string;
@@ -41,9 +44,20 @@ const PassangerPage: React.FC<PassangerPageProps> = () => {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-  } = useForm();
+    control,
+  } = useForm<Detail>({
+    defaultValues: {
+      id: "",
+      fio: "",
+      category: "",
+      eks: 0,
+      sex: "male",
+    },
+  });
+  const toast = useToast();
 
   const [phoneNumbers, setPhonenumbers] = useState<IPhones[]>([]);
+  const [phoneNumber, setPhonenumber] = useState<string>("");
   const [newPhoneNumber, setNewPhoneNumber] = useState<IPhones>({
     number: "",
     description: "",
@@ -58,20 +72,44 @@ const PassangerPage: React.FC<PassangerPageProps> = () => {
 
   const handlerAddNewPhone = () => {
     setPhonenumbers((prev) => [...prev, newPhoneNumber]);
+    setPhonenumber(newPhoneNumber.number);
     setNewPhoneNumber({
       number: "",
       description: "",
     });
   };
+  const [sendRequest, { data, isSuccess, isError }] =
+    useLazySetPassengerQuery();
 
-  async function onSubmit(values) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        resolve();
-      }, 3000);
+  const onSubmit = (data: Detail) => {
+    sendRequest({
+      ...data,
+      phone: phoneNumber,
+      // description: newPhoneNumber.description,
     });
-  }
+    console.log({
+      ...data,
+      phone: phoneNumber,
+      // description: newPhoneNumber.description,
+    });
+  };
+  // const onSubmit = (data: Detail) => sendRequest(data);
+
+  useEffect(() => {
+    if (isSuccess)
+      toast({
+        title: "Пассажир добавлен",
+        status: "success",
+        isClosable: true,
+      });
+    if (isError)
+      toast({
+        title: "Ошибка при добавлении пассажира",
+        status: "error",
+        isClosable: true,
+      });
+    // console.log(data)
+  }, [isSuccess, isError]);
 
   return (
     <Center w="100vw">
@@ -87,13 +125,13 @@ const PassangerPage: React.FC<PassangerPageProps> = () => {
           Данные пассажира
         </Heading>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl isInvalid={Boolean(errors.name)}>
-            <FormLabel htmlFor="name">ФИО</FormLabel>
+          <FormControl isInvalid={Boolean(errors.fio)}>
+            <FormLabel htmlFor="fio">ФИО</FormLabel>
             <Input
-              id="name"
+              id="fio"
               placeholder="ФИО пассажира"
               autoComplete="on"
-              {...register("name", {
+              {...register("fio", {
                 required: "Это поле является обязательным",
                 minLength: {
                   value: 4,
@@ -102,7 +140,7 @@ const PassangerPage: React.FC<PassangerPageProps> = () => {
               })}
             />
             <FormErrorMessage>
-              <>{errors.name && errors.name.message}</>
+              <>{errors.fio && errors.fio.message}</>
             </FormErrorMessage>
           </FormControl>
           <Center height="12px" />
@@ -143,6 +181,7 @@ const PassangerPage: React.FC<PassangerPageProps> = () => {
                 <PopoverCloseButton />
                 <PopoverBody>
                   <Input
+                    id="phone"
                     type="text"
                     placeholder="Телефон"
                     value={newPhoneNumber?.number}
@@ -173,55 +212,59 @@ const PassangerPage: React.FC<PassangerPageProps> = () => {
           <Center height="12px" />
 
           <Text>Пол:</Text>
-          <RadioGroup>
-            <Stack spacing={5} direction="row">
-              <Radio colorScheme="red" value="1">
-                Мужской
-              </Radio>
-              <Radio colorScheme="red" value="2">
-                Женский
-              </Radio>
-            </Stack>
-          </RadioGroup>
+          <FormControl>
+            <Controller
+              control={control}
+              name="sex"
+              render={({ field: { onChange, value } }) => (
+                <RadioGroup onChange={(value) => onChange(value)} value={value}>
+                  <Stack spacing={5} direction="row">
+                    <Radio colorScheme="red" value="male">
+                      Мужской
+                    </Radio>
+                    <Radio colorScheme="red" value="female">
+                      Женский
+                    </Radio>
+                  </Stack>
+                </RadioGroup>
+              )}
+            />
+          </FormControl>
           <Center height="12px" />
 
           <Text>Дополнительная информация:</Text>
-          <Textarea
-            placeholder="Пометка для пассажира позволяющая улучшить качество обслуживания конкретного пассажира"
-            size="md"
-          />
+          <FormControl isInvalid={Boolean(errors.description)}>
+            <Textarea
+              placeholder="Пометка для пассажира позволяющая улучшить качество обслуживания конкретного пассажира"
+              size="md"
+              {...register("description")}
+            />
+          </FormControl>
           <Center height="12px" />
 
           <Text>Выбор наличия ЭКС (электрокардиостимулятора сердца)</Text>
-          <RadioGroup defaultValue="1">
-            <Stack spacing={5} direction="row">
-              <Radio colorScheme="red" value="1">
-                Есть
-              </Radio>
-              <Radio colorScheme="red" value="2">
-                Нет
-              </Radio>
-            </Stack>
-          </RadioGroup>
-          {/* <FormControl isInvalid={Boolean(errors.name)}>
-            <FormLabel htmlFor="passw">Пароль</FormLabel>
-            <Input
-              id="passw"
-              placeholder="Пароль"
-              type="password"
-              autoComplete="on"
-              {...register("passw", {
-                required: "Это поле является обязательным",
-                minLength: {
-                  value: 4,
-                  message: "Длина не может быть мешьше 4 символов",
-                },
-              })}
+          <FormControl>
+            <Controller
+              control={control}
+              name="eks"
+              render={({ field: { onChange, value } }) => (
+                <RadioGroup
+                  defaultValue="0"
+                  onChange={(value) => onChange(value)}
+                  value={value}
+                >
+                  <Stack spacing={5} direction="row">
+                    <Radio colorScheme="red" value={Number("1")}>
+                      Есть
+                    </Radio>
+                    <Radio colorScheme="red" value={Number("0")}>
+                      Нет
+                    </Radio>
+                  </Stack>
+                </RadioGroup>
+              )}
             />
-            <FormErrorMessage>
-              <>{errors.passw && errors.passw.message}</>
-            </FormErrorMessage>
-          </FormControl> */}
+          </FormControl>
           <Center>
             <Button
               mt={4}

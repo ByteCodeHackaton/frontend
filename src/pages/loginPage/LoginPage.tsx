@@ -10,7 +10,7 @@ import {
   Heading,
   Text,
 } from "@chakra-ui/react";
-import { useLoginMutation } from "~/shared/api/apiSlice";
+import { useLoginMutation } from "~/shared/lib/react-redux/slices/authApiSlice";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "~/shared/lib/react-redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";

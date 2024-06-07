@@ -1,0 +1,1 @@
+export { PassangerRegistrationPageRoute } from "./PassangerPage.route"

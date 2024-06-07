@@ -4,7 +4,17 @@ import { NavLink, Outlet } from "react-router-dom";
 // import { sessionQueries } from "~/entities/session";
 import { pathKeys } from "~/shared/lib/react-router";
 import Logo from "~/shared/icons/mm-logo-red.svg?react";
-import { Box, Button, Center, Flex } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Text,
+} from "@chakra-ui/react";
 import Door from "~/shared/icons/door.svg?react";
 
 export function GenericLayout() {
@@ -49,79 +59,125 @@ function UserNavigation() {
           </NavLink>
         </Flex>
         <Center>
-          <Flex wrap="wrap">
+          <Flex wrap="wrap" gap={10}>
             <NavLink to={pathKeys.home()}>
               <Button
                 textColor="black"
                 backgroundColor="transparent"
                 _hover={{ textColor: "red" }}
+                fontWeight={200}
+                p={0}
               >
-                Главная страница
+                <Text>Главная страница</Text>
               </Button>
             </NavLink>
-            <NavLink to={pathKeys.employeeWorkday()}>
-              <Button
+            <Menu isLazy>
+              <MenuButton
                 textColor="black"
                 backgroundColor="transparent"
                 _hover={{ textColor: "red" }}
               >
-                Регистрация рабочего дня сотрудника
-              </Button>
-            </NavLink>
-            <NavLink to={pathKeys.order()}>
-              <Button
+                Пассажиры
+              </MenuButton>
+              <MenuList>
+                <NavLink to={pathKeys.registerPassenger()}>
+                  <MenuItem
+                    textColor="black"
+                    backgroundColor="transparent"
+                    _hover={{ textColor: "red" }}
+                  >
+                    Регистрация пассажира
+                  </MenuItem>
+                </NavLink>
+                <NavLink to={pathKeys.passengers()}>
+                  <MenuItem
+                    textColor="black"
+                    backgroundColor="transparent"
+                    _hover={{ textColor: "red" }}
+                  >
+                    Список пассажиров
+                  </MenuItem>
+                </NavLink>
+              </MenuList>
+            </Menu>
+            <Menu isLazy>
+              <MenuButton
                 textColor="black"
                 backgroundColor="transparent"
                 _hover={{ textColor: "red" }}
               >
-                Регистрация заявки
-              </Button>
-            </NavLink>
-            <NavLink to={pathKeys.orders()}>
-              <Button
+                Сотрудники
+              </MenuButton>
+              <MenuList>
+                <NavLink to={pathKeys.employeeWorkday()}>
+                  <MenuItem
+                    textColor="black"
+                    backgroundColor="transparent"
+                    _hover={{ textColor: "red" }}
+                  >
+                    Регистрация рабочего дня сотрудника
+                  </MenuItem>
+                </NavLink>
+                <NavLink to={pathKeys.registerEmployee()}>
+                  <MenuItem
+                    textColor="black"
+                    backgroundColor="transparent"
+                    _hover={{ textColor: "red" }}
+                  >
+                    Регистрация сотрудника
+                  </MenuItem>
+                </NavLink>
+              </MenuList>
+            </Menu>
+            <Menu isLazy>
+              <MenuButton
                 textColor="black"
                 backgroundColor="transparent"
                 _hover={{ textColor: "red" }}
               >
-                Графики распределений заявок
-              </Button>
-            </NavLink>
-            {/* <NavLink to={pathKeys.page404()}>
-            <Button
-              textColor="black"
-              backgroundColor="transparent"
-              _hover={{ textColor: "red" }}
-            >
-              Страница не найдена
-            </Button>
-          </NavLink> */}
-            <NavLink to={pathKeys.passanger()}>
-              <Button
+                Заявки
+              </MenuButton>
+              <MenuList>
+                <NavLink to={pathKeys.order()}>
+                  <MenuItem
+                    textColor="black"
+                    backgroundColor="transparent"
+                    _hover={{ textColor: "red" }}
+                  >
+                    Регистрация заявки
+                  </MenuItem>
+                </NavLink>
+                <NavLink to={pathKeys.orders()}>
+                  <MenuItem
+                    textColor="black"
+                    backgroundColor="transparent"
+                    _hover={{ textColor: "red" }}
+                  >
+                    Графики распределений заявок
+                  </MenuItem>
+                </NavLink>
+              </MenuList>
+            </Menu>
+            <Menu isLazy>
+              <MenuButton
                 textColor="black"
                 backgroundColor="transparent"
                 _hover={{ textColor: "red" }}
               >
-                Регистрация пассажира
-              </Button>
-            </NavLink>
-            <NavLink to={pathKeys.registerEmployee()}>
-              <Button
-                textColor="black"
-                backgroundColor="transparent"
-                _hover={{ textColor: "red" }}
-              >
-                Регистрация сотрудника
-              </Button>
-            </NavLink>
-            <NavLink to={pathKeys.registerUser()}>
-              <Button
-                textColor="black"
-                backgroundColor="transparent"
-                _hover={{ textColor: "red" }}
-              >
-                Регистрация нового пользователя программы
-              </Button>
-            </NavLink>
+                Пользователи
+              </MenuButton>
+              <MenuList>
+                <NavLink to={pathKeys.registerUser()}>
+                  <MenuItem
+                    textColor="black"
+                    backgroundColor="transparent"
+                    _hover={{ textColor: "red" }}
+                  >
+                    Регистрация нового пользователя программы
+                  </MenuItem>
+                </NavLink>
+              </MenuList>
+            </Menu>
           </Flex>
         </Center>
       </Box>

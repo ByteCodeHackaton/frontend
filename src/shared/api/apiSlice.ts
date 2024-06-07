@@ -30,18 +30,7 @@ const baseQueryWithReauth = async ( args, api, extraOptions ) => {
     }
     return result
 }
-
 export const apiSlice = createApi({
-    baseQuery: baseQueryWithReauth,
-    endpoints: builder => ({
-        login: builder.mutation({
-            query: credentials => ({
-                url: 'auth',
-                method: 'POST',
-                body: {...credentials}
-            })
-        })
-    })
+    baseQuery: baseQuery,
+    endpoints: builder => ({})
 })
-
-export const { useLoginMutation } = apiSlice
