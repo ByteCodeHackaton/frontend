@@ -15,6 +15,7 @@ import {
   PassengersPageRoute,
   PassangerRegistrationPageRoute,
   EmployeesPageRoute,
+  PassengerSearchPageRoute,
 } from "~/pages";
 import { GenericLayout, GuestLayout, NakedLayout } from "~/pages/layouts";
 // import { AuthProvider } from "./AuthProvider";
@@ -46,6 +47,7 @@ const router = createBrowserRouter([
           UsersRegistrationPageRoute,
           PassengersPageRoute,
           EmployeesPageRoute,
+          PassengerSearchPageRoute,
         ],
       },
       {

@@ -80,6 +80,15 @@ function UserNavigation() {
                 Пассажиры
               </MenuButton>
               <MenuList>
+                <NavLink to={pathKeys.passengerSearch()}>
+                  <MenuItem
+                    textColor="black"
+                    backgroundColor="transparent"
+                    _hover={{ textColor: "red" }}
+                  >
+                    Поиск пассажира
+                  </MenuItem>
+                </NavLink>
                 <NavLink to={pathKeys.registerPassenger()}>
                   <MenuItem
                     textColor="black"

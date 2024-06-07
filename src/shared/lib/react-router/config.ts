@@ -27,7 +27,10 @@ export const pathKeys = {
     return pathKeys.root.concat('passengers/');
   },
   passenger() {
-    return pathKeys.root.concat('passengers/');
+    return pathKeys.root.concat('passenger/');
+  },
+  passengerSearch() {
+    return pathKeys.root.concat('passenger-search/');
   },
   passengerById( id : string) {
       return pathKeys.passenger().concat(id, '/');

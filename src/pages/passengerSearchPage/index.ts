@@ -1,0 +1,1 @@
+export {PassengerSearchPageRoute} from "./passengerSearchPage.route"

@@ -19,7 +19,7 @@ interface PassangerCard {
   detail: Detail;
 }
 
-const PassangerCard: FC<PassangerCard> = ({ detail }) => {
+export const PassangerCard: FC<PassangerCard> = ({ detail }) => {
   return (
     <Card>
       <CardBody>
@@ -41,8 +41,8 @@ const PassangerCard: FC<PassangerCard> = ({ detail }) => {
 const PassangersList: FC<PassangersListProps> = ({ options }) => {
   return (
     <Flex direction="column" gap={2}>
-      {options.document.details.map((passanger) => (
-        <PassangerCard key={passanger.id.toString()} detail={passanger} />
+      {options.document.details.map((item) => (
+        <PassangerCard key={item.id.toString()} detail={item} />
       ))}
     </Flex>
   );

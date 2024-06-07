@@ -8,10 +8,10 @@ export const passengersApiSlice = apiSlice.injectEndpoints({
             keepUnusedDataFor: 5,
         }),
         getPassenger: builder.query<Detail, { fio?: string, phone?: string }>({
-            query: (body) => ({
-                url: '/api/v1/passenger',
+            query: (args) => ({
+                url: `/api/v1/passenger`,
                 method: 'GET',
-                body
+                params: args
             })
         }),
         setPassenger: builder.query<any, Detail>({
@@ -25,5 +25,5 @@ export const passengersApiSlice = apiSlice.injectEndpoints({
 })
 
 export const {
-    useGetPassengersQuery, useLazySetPassengerQuery, useGetPassengerQuery
+    useGetPassengersQuery, useLazySetPassengerQuery, useLazyGetPassengerQuery
 } = passengersApiSlice 

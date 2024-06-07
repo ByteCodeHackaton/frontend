@@ -50,7 +50,7 @@ const PassangerPage: React.FC<PassangerPageProps> = () => {
       id: "",
       fio: "",
       category: "",
-      eks: 0,
+      eks: "0",
       sex: "male",
     },
   });
@@ -85,6 +85,7 @@ const PassangerPage: React.FC<PassangerPageProps> = () => {
     sendRequest({
       ...data,
       phone: phoneNumber,
+      eks: Number(data.eks),
       // description: newPhoneNumber.description,
     });
     console.log({
@@ -254,10 +255,10 @@ const PassangerPage: React.FC<PassangerPageProps> = () => {
                   value={value}
                 >
                   <Stack spacing={5} direction="row">
-                    <Radio colorScheme="red" value={Number("1")}>
+                    <Radio colorScheme="red" value="1">
                       Есть
                     </Radio>
-                    <Radio colorScheme="red" value={Number("0")}>
+                    <Radio colorScheme="red" value="0">
                       Нет
                     </Radio>
                   </Stack>
