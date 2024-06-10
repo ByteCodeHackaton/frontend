@@ -10,6 +10,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { AiOutlineForm } from "react-icons/ai";
+import { EmployeesModal } from "./employees.modal";
+import { EmployeesDeleteModal } from "./employeesClose.modal";
 
 interface EmployeesListProps {
   options: RootInterface;
@@ -27,11 +29,10 @@ const EmployeeCard: FC<EmployeeCard> = ({ detail }) => {
           <Text>
             {detail.fio} {detail.rank}
           </Text>
-          <IconButton
-            aria-label="Passenger info"
-            icon={<Icon as={AiOutlineForm} color="white" h={8} w={8} />}
-            colorScheme="red"
-          />
+          <HStack>
+            <EmployeesModal options={detail} />
+            <EmployeesDeleteModal options={detail} />
+          </HStack>
         </HStack>
       </CardBody>
     </Card>

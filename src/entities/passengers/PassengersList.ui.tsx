@@ -1,15 +1,8 @@
 import { FC } from "react";
 import { Detail, RootInterface } from "./types";
-import {
-  Card,
-  CardBody,
-  Flex,
-  HStack,
-  Icon,
-  IconButton,
-  Text,
-} from "@chakra-ui/react";
-import { AiOutlineForm } from "react-icons/ai";
+import { Card, CardBody, Flex, HStack, Text } from "@chakra-ui/react";
+import { PassengersModal } from "./passengers.modal";
+import { PassengersDeleteModal } from "./passengersClose.modal";
 
 interface PassangersListProps {
   options: RootInterface;
@@ -27,11 +20,10 @@ export const PassangerCard: FC<PassangerCard> = ({ detail }) => {
           <Text>
             {detail.fio} {detail.phone}
           </Text>
-          <IconButton
-            aria-label="Passenger info"
-            icon={<Icon as={AiOutlineForm} color="white" h={8} w={8} />}
-            colorScheme="red"
-          />
+          <HStack>
+            <PassengersModal options={detail} />
+            <PassengersDeleteModal options={detail} />
+          </HStack>
         </HStack>
       </CardBody>
     </Card>

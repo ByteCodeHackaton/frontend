@@ -26,3 +26,18 @@ export interface RootInterface {
     tab_number: string;
     type_work: string;
   }
+
+  export interface IRanksRoot {
+    document: IRanksDocument;
+  }
+  
+  
+  export interface IRanksDocument {
+    details: IRanksDetail[];
+  }
+  
+  
+  export interface IRanksDetail {
+    id: string;
+    rank: string;
+  }

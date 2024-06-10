@@ -13,5 +13,5 @@ export interface Detail {
   category: string;
   sex: string;
   description: string;
-  eks: number;
+  eks: string;
 }
