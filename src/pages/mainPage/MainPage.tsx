@@ -1,33 +1,22 @@
-import { FC } from "react";
-import {
-  FormErrorMessage,
-  FormLabel,
-  FormControl,
-  Input,
-  Button,
-  Box,
-  Center,
-  Heading,
-  Text,
-  Select,
-  Flex,
-  Textarea,
-  RadioGroup,
-  Stack,
-  Radio,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  Divider,
-} from "@chakra-ui/react";
+import { FC, useState } from "react";
+import { Box, Center, Heading, Divider, Spinner } from "@chakra-ui/react";
+import { useGetOrdersQuery } from "~/entities/orders/orders.api";
+import { OrdersList } from "~/entities/orders/ordersList";
+import { Pagination } from "~/shared/components/pagination.ui";
 
 interface MainPageProps {
   className?: string;
 }
 
 const MainPage: FC<MainPageProps> = () => {
+  const [limit, setLimit] = useState(20);
+  const [off, setOff] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { data, isLoading, isSuccess, isError, error } = useGetOrdersQuery({
+    limit,
+    off,
+  });
   return (
     <Center w="100vw">
       <Box
@@ -42,7 +31,19 @@ const MainPage: FC<MainPageProps> = () => {
           Заявки
         </Heading>
         <Divider orientation="horizontal" />
-        Coming soon...
+        {isLoading && <Spinner color="red.500" />}{" "}
+        {isSuccess && <OrdersList options={data} />}
+        {isSuccess && (
+          <Pagination
+            limit={limit}
+            off={off}
+            setLimit={setLimit}
+            setOff={setOff}
+            pages={data.document.page_count}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        )}
       </Box>
     </Center>
   );

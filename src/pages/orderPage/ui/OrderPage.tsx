@@ -1,3 +1,4 @@
+import { Center, Heading } from "@chakra-ui/react";
 import { FC } from "react";
 import { OrderForm } from "~/entities/orders";
 
@@ -6,7 +7,16 @@ interface OrderPageProps {
 }
 
 const OrderPage: FC<OrderPageProps> = () => {
-  return <OrderForm />;
+  return (
+    <>
+      <Center>
+        <Heading size="md" mt={24}>
+          Регистрация заявки
+        </Heading>
+      </Center>
+      <OrderForm />
+    </>
+  );
 };
 
 export { OrderPage };
