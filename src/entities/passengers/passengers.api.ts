@@ -3,8 +3,11 @@ import { Detail, RootInterface } from "./types"
 
 export const passengersApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
-        getPassengers: builder.query<RootInterface, void>({
-            query: () => '/api/v1/passenger/list',
+        getPassengers: builder.query<RootInterface, {limit: number, off: number}>({
+            query: (args) => ({url: '/api/v1/passenger/list', method: 'GET', params: {
+                limit: args.limit,
+                off: args.off
+            }}),
             providesTags: ['Passengers']
         }),
         getPassenger: builder.query<Detail, { fio?: string, phone?: string }>({

@@ -6,9 +6,9 @@ export interface RootInterface {
   
   
   export interface Document {
-  
+    total_count: number;
+    page_count: number;
     details: Detail[];
-  
   }
   
   

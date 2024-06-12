@@ -26,18 +26,23 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  async function onSubmit(values) {
+  const onSubmit = async (values, event: Event) => {
+    event.preventDefault();
+    console.log({
+      login: values.login,
+      password: values.password,
+    });
     try {
       const userData = await login({
-        user: values.user,
-        password: values.passw,
+        login: values.login,
+        password: values.password,
       }).unwrap();
       dispatch(setCredentials({ ...userData, user: values.user }));
       navigate("/");
     } catch (err) {
       console.log(err);
     }
-  }
+  };
   // return new Promise((resolve) => {
   //   setTimeout(() => {
   //     alert(JSON.stringify(values, null, 2));
@@ -59,13 +64,13 @@ const LoginPage = () => {
           Вход
         </Heading>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl isInvalid={Boolean(errors.name)}>
-            <FormLabel htmlFor="name">Имя входа</FormLabel>
+          <FormControl isInvalid={Boolean(errors.login)}>
+            <FormLabel htmlFor="login">Имя входа</FormLabel>
             <Input
-              id="name"
+              id="login"
               placeholder="Имя входа"
               autoComplete="on"
-              {...register("name", {
+              {...register("login", {
                 required: "Это поле является обязательным",
                 minLength: {
                   value: 4,
@@ -74,17 +79,17 @@ const LoginPage = () => {
               })}
             />
             <FormErrorMessage>
-              <>{errors.name && errors.name.message}</>
+              <>{errors.login && errors.login.message}</>
             </FormErrorMessage>
           </FormControl>
-          <FormControl isInvalid={Boolean(errors.name)}>
-            <FormLabel htmlFor="passw">Пароль</FormLabel>
+          <FormControl isInvalid={Boolean(errors.password)}>
+            <FormLabel htmlFor="password">Пароль</FormLabel>
             <Input
-              id="passw"
+              id="password"
               placeholder="Пароль"
               type="password"
               autoComplete="on"
-              {...register("passw", {
+              {...register("password", {
                 required: "Это поле является обязательным",
                 minLength: {
                   value: 4,
@@ -93,7 +98,7 @@ const LoginPage = () => {
               })}
             />
             <FormErrorMessage>
-              <>{errors.passw && errors.passw.message}</>
+              <>{errors.password && errors.password.message}</>
             </FormErrorMessage>
           </FormControl>
           <Center>

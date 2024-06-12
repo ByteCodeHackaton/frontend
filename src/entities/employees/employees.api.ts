@@ -3,8 +3,15 @@ import { Detail, IRanksRoot, RootInterface } from "./employees.types"
 
 export const employeesApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
-        getEmployees: builder.query<RootInterface, void>({
-            query: () => '/api/v1/employee/list?limit=40&off=1',
+        getEmployees: builder.query<RootInterface, {limit: number, off: number}>({
+            query: (args) => ({
+                url: '/api/v1/employee/list',
+                method: 'GET',
+                params: {
+                    limit: args.limit,
+                    off: args.off
+                }
+            }),
             providesTags: ['Employees']
         }),
         setEmployee: builder.query<any, Detail>({

@@ -9,7 +9,6 @@ import {
   IconButton,
   Text,
 } from "@chakra-ui/react";
-import { AiOutlineForm } from "react-icons/ai";
 import { EmployeesModal } from "./employees.modal";
 import { EmployeesDeleteModal } from "./employeesClose.modal";
 

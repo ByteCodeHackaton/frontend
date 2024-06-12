@@ -1,13 +1,20 @@
 import { Box, Center, Divider, Heading, Spinner } from "@chakra-ui/react";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { PassangersList } from "~/entities/passengers/PassengersList.ui";
 import { useGetPassengersQuery } from "~/entities/passengers/passengers.api";
+import { Pagination } from "~/shared/components/pagination.ui";
 
 interface PassengersPageProps {}
 
 const PassengersPage: FC<PassengersPageProps> = () => {
-  const { data, isLoading, isSuccess, isError, error } =
-    useGetPassengersQuery();
+  const [limit, setLimit] = useState(20);
+  const [off, setOff] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { data, isLoading, isSuccess, isError, error } = useGetPassengersQuery({
+    limit,
+    off,
+  });
   return (
     <Center w="100vw">
       <Box
@@ -24,6 +31,17 @@ const PassengersPage: FC<PassengersPageProps> = () => {
         <Divider orientation="horizontal" />
         {isLoading && <Spinner color="red.500" />}{" "}
         {isSuccess && <PassangersList options={data} />}
+        {isSuccess && (
+          <Pagination
+            limit={limit}
+            off={off}
+            setLimit={setLimit}
+            setOff={setOff}
+            pages={data.document.page_count}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        )}
       </Box>
     </Center>
   );
