@@ -1,6 +1,7 @@
 import {
   RouterProvider,
   createBrowserRouter,
+  redirect,
   useRouteError,
 } from "react-router-dom";
 import {
@@ -19,6 +20,7 @@ import {
 } from "~/pages";
 import { GenericLayout, GuestLayout, NakedLayout } from "~/pages/layouts";
 import { AuthProvider } from "./AuthProvider";
+import { pathKeys } from "~/shared/lib/react-router";
 
 // https://github.com/remix-run/react-router/discussions/10166
 function BubbleError() {
@@ -57,6 +59,10 @@ const router = createBrowserRouter([
       {
         element: <NakedLayout />,
         children: [NotFoundRoute],
+      },
+      {
+        loader: async () => redirect(pathKeys.page404()),
+        path: "*",
       },
     ],
   },

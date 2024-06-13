@@ -4,6 +4,6 @@ import { createElement } from "react";
 import { NotFoundPage } from "./NotFoundPage";
 
 export const NotFoundRoute: RouteObject = {
-  path: pathKeys.home(),
+  path: pathKeys.page404(),
   element: createElement(NotFoundPage),
 };
