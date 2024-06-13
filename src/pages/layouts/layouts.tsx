@@ -9,6 +9,8 @@ import {
   Button,
   Center,
   Flex,
+  Icon,
+  IconButton,
   Menu,
   MenuButton,
   MenuItem,
@@ -16,6 +18,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import Door from "~/shared/icons/door.svg?react";
+import { useState } from "react";
+import { SlMenu } from "react-icons/sl";
 
 export function GenericLayout() {
   //   const { data } = useSuspenseQuery();
@@ -44,22 +48,38 @@ export function NakedLayout() {
 
 function UserNavigation() {
   //   const { data: user } = useSuspenseQuery();
+  const [isOpen, setIsOpen] = useState(false);
+  const toggle = () => setIsOpen((prev) => !prev);
 
   return (
     <nav>
       <Box>
-        <Flex maxW="960px" mx="auto" justify="space-between" align="center">
-          <NavLink to={pathKeys.home()}>
-            <Logo width="221" height={80} />
-          </NavLink>
+        <Flex
+          maxW="960px"
+          mx="auto"
+          p={4}
+          justify="space-between"
+          align="center"
+        >
+          <Box display={{ base: "none", md: "flex" }}>
+            <NavLink to={pathKeys.home()}>
+              <Logo width="221" height={80} />
+            </NavLink>
+          </Box>
+          <IconButton
+            aria-label="Open mobile menu"
+            icon={<Icon as={SlMenu} />}
+            onClick={toggle}
+            display={{ base: "flex", md: "none" }}
+          />
           <NavLink to={pathKeys.login()}>
             <Button colorScheme="red" rightIcon={<Door color="#fff" />}>
               Войти
             </Button>
           </NavLink>
         </Flex>
-        <Center>
-          <Flex wrap="wrap" gap={10}>
+        <Center display={{ base: isOpen ? "flex" : "none", md: "flex" }}>
+          <Flex wrap="wrap" gap={10} flexDir={{ base: "column", md: "row" }}>
             <NavLink to={pathKeys.home()}>
               <Button
                 textColor="black"
@@ -207,10 +227,18 @@ function GuestNavigation() {
   return (
     <nav>
       <Box>
-        <Flex maxW="960px" mx="auto" justify="space-between" align="center">
-          <NavLink to={pathKeys.home()}>
-            <Logo width="221" height={80} />
-          </NavLink>
+        <Flex
+          maxW="960px"
+          mx="auto"
+          p={4}
+          justify="space-between"
+          align="center"
+        >
+          <Box>
+            <NavLink to={pathKeys.home()}>
+              <Logo width="221" height={80} />
+            </NavLink>
+          </Box>
           <NavLink to={pathKeys.login()}>
             <Button colorScheme="red" rightIcon={<Door color="#fff" />}>
               Войти

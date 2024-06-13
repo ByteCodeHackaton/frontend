@@ -5,7 +5,7 @@ export const employeesApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getEmployees: builder.query<RootInterface, {limit: number, off: number}>({
             query: (args) => ({
-                url: '/api/v1/employee/list',
+                url: '/db_service/api/v1/employee/list',
                 method: 'GET',
                 params: {
                     limit: args.limit,
