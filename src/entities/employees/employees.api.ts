@@ -16,14 +16,14 @@ export const employeesApiSlice = apiSlice.injectEndpoints({
         }),
         setEmployee: builder.query<any, Detail>({
             query: (body) => ({
-                url: '/api/v1/employee/set',
+                url: '/db_service/api/v1/employee/set',
                 method: 'POST',
                 body
             })
         }),
         updateEmployee: builder.mutation({
             query: ({body, params}) => ({
-                url: '/api/v1/employee/update',
+                url: '/db_service/api/v1/employee/update',
                 method: 'POST',
                 body: {
                     date: body.date,
@@ -44,7 +44,7 @@ export const employeesApiSlice = apiSlice.injectEndpoints({
         }),
         deleteEmployee: builder.mutation<any, {id: string}>({
             query: (body) => ({
-                url: '/api/v1/employee/delete',
+                url: '/db_service/api/v1/employee/delete',
                 method: 'GET',
                 params: { id: body.id }
             }),
@@ -52,7 +52,7 @@ export const employeesApiSlice = apiSlice.injectEndpoints({
         }),
         getEmployeeRanks: builder.query<IRanksRoot, any>({
             query: () => ({
-                url: '/api/v1/rank/list',
+                url: '/db_service/api/v1/rank/list',
                 method: 'GET',
             })
         }),

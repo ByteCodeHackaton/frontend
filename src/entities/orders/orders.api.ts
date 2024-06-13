@@ -5,7 +5,7 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getOrders: builder.query<RootInterface, {limit: number, off: number}>({
             query: (args) => ({
-                url: '/api/v1/order/list',
+                url: '/db_service/api/v1/order/list',
                 method: 'GET',
                 params: {
                     limit: args.limit,
@@ -16,14 +16,14 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
         }),
         setOrder: builder.query<any, Detail>({
             query: (body) => ({
-                url: '/api/v1/order/set',
+                url: '/db_service/api/v1/order/set',
                 method: 'POST',
                 body
             })
         }),
         updateOrder: builder.mutation({
             query: ({body, params}) => ({
-                url: '/api/v1/order/update',
+                url: '/db_service/api/v1/order/update',
                 method: 'POST',
                 body: 
                 {
@@ -46,7 +46,7 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
         }),
         deleteOrder: builder.mutation<any, {id: string}>({
             query: (body) => ({
-                url: '/api/v1/order/delete',
+                url: '/db_service/api/v1/order/delete',
                 method: 'GET',
                 params: { id: body.id }
             }),
@@ -54,7 +54,7 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
         }),
         getOrdersStatuses: builder.query<IStatusesRootInterface, any>({
             query: () => ({
-                url: '/api/v1/order/state/list',
+                url: '/db_service/api/v1/order/state/list',
                 method: 'GET',
             })
         }),

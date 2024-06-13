@@ -4,7 +4,7 @@ import { Detail, RootInterface } from "./types"
 export const passengersApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getPassengers: builder.query<RootInterface, {limit: number, off: number}>({
-            query: (args) => ({url: '/api/v1/passenger/list', method: 'GET', params: {
+            query: (args) => ({url: '/db_service/api/v1/passenger/list', method: 'GET', params: {
                 limit: args.limit,
                 off: args.off
             }}),
@@ -12,21 +12,21 @@ export const passengersApiSlice = apiSlice.injectEndpoints({
         }),
         getPassenger: builder.query<Detail, { fio?: string, phone?: string }>({
             query: (args) => ({
-                url: `/api/v1/passenger`,
+                url: `/db_service/api/v1/passenger`,
                 method: 'GET',
                 params: args
             })
         }),
         setPassenger: builder.query<any, Detail>({
             query: (body) => ({
-                url: '/api/v1/passenger/set',
+                url: '/db_service/api/v1/passenger/set',
                 method: 'POST',
                 body
             })
         }),
         updatePassenger: builder.mutation({
             query: ({body, params}) => ({
-                url: '/api/v1/passenger/update',
+                url: '/db_service/api/v1/passenger/update',
                 method: 'POST',
                 body: {
                     id: body.id,
@@ -43,7 +43,7 @@ export const passengersApiSlice = apiSlice.injectEndpoints({
         }),
         deletePassenger: builder.mutation<any, {id: string}>({
             query: (body) => ({
-                url: '/api/v1/passenger/delete',
+                url: '/db_service/api/v1/passenger/delete',
                 method: 'GET',
                 params: { id: body.id }
             }),
