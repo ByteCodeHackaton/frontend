@@ -1,6 +1,4 @@
 import { FC } from "react";
-import { classNames } from "shared/lib/helpers/className/className";
-import cls from "./CheckBox.module.scss";
 
 interface CheckBoxProps {
   className?: string;

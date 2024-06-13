@@ -9,6 +9,7 @@ import {
   Button,
   Center,
   Flex,
+  HStack,
   Icon,
   IconButton,
   Menu,
@@ -20,6 +21,13 @@ import {
 import Door from "~/shared/icons/door.svg?react";
 import { useState } from "react";
 import { SlMenu } from "react-icons/sl";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  logOut,
+  selectCurrentRole,
+  selectCurrentToken,
+  selectCurrentUser,
+} from "~/shared/lib/react-redux/slices/authSlice";
 
 export function GenericLayout() {
   //   const { data } = useSuspenseQuery();
@@ -50,6 +58,9 @@ function UserNavigation() {
   //   const { data: user } = useSuspenseQuery();
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen((prev) => !prev);
+  const role = useSelector(selectCurrentRole);
+  const token = useSelector(selectCurrentToken);
+  const dispatch = useDispatch();
 
   return (
     <nav>
@@ -72,11 +83,26 @@ function UserNavigation() {
             onClick={toggle}
             display={{ base: "flex", md: "none" }}
           />
-          <NavLink to={pathKeys.login()}>
-            <Button colorScheme="red" rightIcon={<Door color="#fff" />}>
-              Войти
-            </Button>
-          </NavLink>
+          <HStack>
+            {role && <Text>{role}</Text>}
+
+            {!token ? (
+              <NavLink to={pathKeys.login()}>
+                <Button colorScheme="red" rightIcon={<Door color="#fff" />}>
+                  Войти
+                </Button>
+              </NavLink>
+            ) : (
+              <Button
+                onClick={() => dispatch(logOut())}
+                variant="outline"
+                colorScheme="red"
+                fontWeight={200}
+              >
+                <Text>Выйти</Text>
+              </Button>
+            )}
+          </HStack>
         </Flex>
         <Center display={{ base: isOpen ? "flex" : "none", md: "flex" }}>
           <Flex wrap="wrap" gap={10} flexDir={{ base: "column", md: "row" }}>

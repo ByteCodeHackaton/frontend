@@ -1,5 +1,4 @@
 import { FC } from "react";
-// import cls from "./OrderSplitsPage.module.scss";
 
 interface OrderSplitsPageProps {
   className?: string;

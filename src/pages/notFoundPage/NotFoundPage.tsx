@@ -1,5 +1,4 @@
 import { FC } from "react";
-// import cls from "./NotFoundPage.module.scss";
 
 interface NotFoundPageProps {
   className?: string;

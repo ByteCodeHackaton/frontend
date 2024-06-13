@@ -33,9 +33,9 @@ const router = createBrowserRouter([
     children: [
       {
         element: (
-          // <AuthProvider>
-          <GenericLayout />
-          // </AuthProvider>
+          <AuthProvider>
+            <GenericLayout />
+          </AuthProvider>
         ),
         children: [
           MainPageRoute,
