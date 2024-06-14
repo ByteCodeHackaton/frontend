@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { logOut, setCredentials } from "~/shared/lib/react-redux/slices/authSlice";
+import { logOut, refreshCredentials, setCredentials } from "~/shared/lib/react-redux/slices/authSlice";
 
 const baseQuery = fetchBaseQuery({
     baseUrl: import.meta.env.VITE_BACKEND_URL,
@@ -22,8 +22,7 @@ const baseQueryWithReauth = async ( args, api, extraOptions ) => {
         const refreshResult = await baseQuery({ url: '/authentification/refresh', method: "POST", body: { access: api.getState().auth.token, refresh: api.getState().auth.refreshToken}}, api, extraOptions)
         console.log(refreshResult)
         if (refreshResult.data) {
-            const user = api.getState().auth.user
-            api.dispatch(setCredentials({...refreshResult.data, user}))
+            api.dispatch(refreshCredentials({...refreshResult.data}))
             result = await baseQuery(args, api, extraOptions)
         } else {
             api.dispatch(logOut())
