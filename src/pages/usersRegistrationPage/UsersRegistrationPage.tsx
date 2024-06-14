@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import {
   FormErrorMessage,
   FormLabel,
@@ -9,20 +9,52 @@ import {
   Center,
   Heading,
   useToast,
+  Skeleton,
+  Select,
 } from "@chakra-ui/react";
+import {
+  useGetRolesQuery,
+  useSetUserMutation,
+} from "~/entities/users/users.api";
 
 interface UsersRegistrationPageProps {
   className?: string;
 }
 
-const UsersRegistrationPage: FC<UsersRegistrationPageProps> = () => {
+const UsersRegistrationPage: React.FC<UsersRegistrationPageProps> = () => {
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
+    control,
   } = useForm();
+  const [signUp] = useSetUserMutation();
+  const {
+    data: roles,
+    isSuccess: isSuccessRoles,
+    isLoading: isLoadingRoles,
+  } = useGetRolesQuery();
+
   const toast = useToast();
-  const onSubmit = async (values, event: Event) => console.log(values);
+  const onSubmit = async (values) => {
+    try {
+      await signUp({
+        login: values.login,
+        pass: values.pass,
+      });
+      toast({
+        title: "Пользователь зарегестрирован",
+        status: "success",
+        isClosable: true,
+      });
+    } catch (err) {
+      toast({
+        title: err.data,
+        status: "error",
+        isClosable: true,
+      });
+    }
+  };
   return (
     <Center h="calc(100vh - 300px)" w="100vw" position="static">
       <Box
@@ -54,14 +86,14 @@ const UsersRegistrationPage: FC<UsersRegistrationPageProps> = () => {
               <>{errors.login && errors.login.message}</>
             </FormErrorMessage>
           </FormControl>
-          <FormControl isInvalid={Boolean(errors.password)}>
-            <FormLabel htmlFor="password">Пароль</FormLabel>
+          <FormControl isInvalid={Boolean(errors.pass)}>
+            <FormLabel htmlFor="pass">Пароль</FormLabel>
             <Input
-              id="password"
+              id="pass"
               placeholder="Пароль"
               type="password"
               autoComplete="on"
-              {...register("password", {
+              {...register("pass", {
                 required: "Это поле является обязательным",
                 minLength: {
                   value: 4,
@@ -70,8 +102,25 @@ const UsersRegistrationPage: FC<UsersRegistrationPageProps> = () => {
               })}
             />
             <FormErrorMessage>
-              <>{errors.password && errors.password.message}</>
+              <>{errors.pass && errors.pass.message}</>
             </FormErrorMessage>
+          </FormControl>
+          <FormControl>
+            <FormLabel>Должность сотрудника</FormLabel>
+            <Controller
+              control={control}
+              name="id"
+              render={({ field: { onChange, value } }) => (
+                <Skeleton isLoaded={!isLoadingRoles}>
+                  <Select onChange={(value) => onChange(value)} value={value}>
+                    {isSuccessRoles &&
+                      roles.document.details.map((option) => (
+                        <option value={option.id}>{option.role}</option>
+                      ))}
+                  </Select>
+                </Skeleton>
+              )}
+            />
           </FormControl>
           <Center>
             <Button

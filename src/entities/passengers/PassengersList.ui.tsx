@@ -1,6 +1,17 @@
 import { FC } from "react";
 import { Detail, RootInterface } from "./types";
-import { Card, CardBody, Flex, HStack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Card,
+  CardBody,
+  CardHeader,
+  Flex,
+  HStack,
+  Heading,
+  Stack,
+  StackDivider,
+  Text,
+} from "@chakra-ui/react";
 import { PassengersModal } from "./passengers.modal";
 import { PassengersDeleteModal } from "./passengersClose.modal";
 
@@ -15,16 +26,65 @@ interface PassangerCard {
 export const PassangerCard: FC<PassangerCard> = ({ detail }) => {
   return (
     <Card>
+      <CardHeader>
+        <Heading size="md">ID: {detail.id}</Heading>
+      </CardHeader>
+
       <CardBody>
-        <HStack justifyContent="space-between">
-          <Text>
-            {detail.fio} {detail.phone}
-          </Text>
+        <Stack divider={<StackDivider />} spacing="4">
+          <Box>
+            <Heading size="xs" textTransform="uppercase">
+              fio
+            </Heading>
+            <Text pt="2" fontSize="sm">
+              {detail.fio}
+            </Text>
+          </Box>
+          <Box>
+            <Heading size="xs" textTransform="uppercase">
+              category
+            </Heading>
+            <Text pt="2" fontSize="sm">
+              {detail.category}
+            </Text>
+          </Box>
+          <Box>
+            <Heading size="xs" textTransform="uppercase">
+              description
+            </Heading>
+            <Text pt="2" fontSize="sm">
+              {detail.description}
+            </Text>
+          </Box>
+          <Box>
+            <Heading size="xs" textTransform="uppercase">
+              eks
+            </Heading>
+            <Text pt="2" fontSize="sm">
+              {detail.eks}
+            </Text>
+          </Box>
+          <Box>
+            <Heading size="xs" textTransform="uppercase">
+              phone
+            </Heading>
+            <Text pt="2" fontSize="sm">
+              {detail.phone}
+            </Text>
+          </Box>
+          <Box>
+            <Heading size="xs" textTransform="uppercase">
+              sex
+            </Heading>
+            <Text pt="2" fontSize="sm">
+              {detail.sex}
+            </Text>
+          </Box>
           <HStack>
             <PassengersModal options={detail} />
             <PassengersDeleteModal options={detail} />
           </HStack>
-        </HStack>
+        </Stack>
       </CardBody>
     </Card>
   );
