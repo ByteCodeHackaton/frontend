@@ -1,6 +1,5 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {
-  FormErrorMessage,
   FormLabel,
   FormControl,
   Input,
@@ -8,26 +7,13 @@ import {
   Box,
   Center,
   Heading,
-  Text,
   Select,
-  Flex,
-  Textarea,
-  RadioGroup,
-  Stack,
-  Radio,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  InputGroup,
-  InputLeftAddon,
-  PinInput,
-  PinInputField,
   HStack,
   Divider,
+  useToast,
 } from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+import { useLazySetWorkdayQuery } from "~/entities/employees/employees.api";
 
 interface EmployeeWorkdayPageProps {
   className?: string;
@@ -38,19 +24,49 @@ const EmployeeWorkdayPage: FC<EmployeeWorkdayPageProps> = () => {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
+    control,
   } = useForm();
+  const toast = useToast();
+
   const [isOther, setIsOther] = useState(false);
   const onChangehandler = (value: string) =>
     value === "option5" ? setIsOther(true) : setIsOther(false);
 
-  async function onSubmit(values) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        resolve();
-      }, 3000);
+  const [
+    sendSetRequest,
+    { data: dataSet, isSuccess: isSuccessSet, isError: isErrorSet },
+  ] = useLazySetWorkdayQuery();
+
+  useEffect(() => {
+    if (isSuccessSet)
+      toast({
+        title: "Успешно",
+        status: "success",
+        isClosable: true,
+      });
+    if (isErrorSet)
+      toast({
+        title: "Ошибка",
+        status: "error",
+        isClosable: true,
+      });
+  }, [isSuccessSet, isErrorSet]);
+
+  const onSubmit = (values) =>
+    sendSetRequest({
+      id: "",
+      employee_id: "emp",
+      date_work: values.date_work,
+      time_work:
+        values.time_work === "my_time"
+          ? `${values.time_work_from}-${values.time_work_to}`
+          : values.time_work,
+      state_wd: `${values.date_dop_smena_from}-${values.date_dop_smena_to}`,
+      date_dop_smena: `${values.date_dop_smena_from}-${values.date_dop_smena_to}`,
+      date_ucheba: `${values.date_ucheba_from}-${values.date_ucheba_to}`,
+      date_change: `${values.date_change_from}-${values.date_change_to}`,
+      intern: `${values.intern_from}-${values.intern_to}`,
     });
-  }
 
   return (
     <Center w="100vw">
@@ -68,18 +84,34 @@ const EmployeeWorkdayPage: FC<EmployeeWorkdayPageProps> = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl>
             <FormLabel>Дата выхода</FormLabel>
-            <Input placeholder="Дата выхода" size="md" type="datetime-local" />
+            <Input
+              placeholder="Дата выхода"
+              size="md"
+              type="datetime-local"
+              {...register("date_work")}
+            />
           </FormControl>
           <Center height="12px" />
           <FormControl>
             <FormLabel>Время работы</FormLabel>
-            <Select onChange={(e) => onChangehandler(e.target.value)}>
-              <option value="option1">07:00-19:00</option>
-              <option value="option2">08:00-20:00</option>
-              <option value="option3">20:00-08:00</option>
-              <option value="option4">08:00-17:00</option>
-              <option value="option5">Другое</option>
-            </Select>
+            <Controller
+              control={control}
+              name="time_work"
+              render={({ field: { onChange, value } }) => (
+                <Select
+                  onChange={(value) => {
+                    onChange(value);
+                  }}
+                  value={value}
+                >
+                  <option value="07:00-19:00">07:00-19:00</option>
+                  <option value="08:00-20:00">08:00-20:00</option>
+                  <option value="20:00-08:00">20:00-08:00</option>
+                  <option value="08:00-17:00">08:00-17:00</option>
+                  <option value="my_time">Другое</option>
+                </Select>
+              )}
+            />
             <Center height="12px" />
 
             {isOther && (
@@ -90,7 +122,8 @@ const EmployeeWorkdayPage: FC<EmployeeWorkdayPageProps> = () => {
                   id="from"
                   placeholder="От"
                   size="md"
-                  type="datetime-local"
+                  type="time"
+                  {...register("time_work_from")}
                 />
                 <FormLabel htmlFor="to">До</FormLabel>
 
@@ -98,7 +131,8 @@ const EmployeeWorkdayPage: FC<EmployeeWorkdayPageProps> = () => {
                   id="to"
                   placeholder="До"
                   size="md"
-                  type="datetime-local"
+                  type="time"
+                  {...register("time_work_to")}
                 />
               </HStack>
             )}
@@ -108,25 +142,31 @@ const EmployeeWorkdayPage: FC<EmployeeWorkdayPageProps> = () => {
             <Center height="12px" />
 
             <FormLabel>Проставление статусов:</FormLabel>
-            <Select>
-              <option value="option1">Выходной</option>
-              <option value="option2">Больничный</option>
-              <option value="option3">Отпуск</option>
-            </Select>
+            <Controller
+              control={control}
+              name="state_wd"
+              render={({ field: { onChange, value } }) => (
+                <Select
+                  onChange={(value) => {
+                    onChange(value);
+                  }}
+                  value={value}
+                >
+                  <option value="Выходной">Выходной</option>
+                  <option value="Больничный">Больничный</option>
+                  <option value="Отпуск">Отпуск</option>
+                </Select>
+              )}
+            />
             <Center height="12px" />
-            <HStack>
+            {/* <HStack>
               <FormLabel htmlFor="from">От</FormLabel>
 
-              <Input
-                id="from"
-                placeholder="От"
-                size="md"
-                type="datetime-local"
-              />
+              <Input id="from" placeholder="От" size="md" type="time" />
               <FormLabel htmlFor="to">До</FormLabel>
 
-              <Input id="to" placeholder="До" size="md" type="datetime-local" />
-            </HStack>
+              <Input id="to" placeholder="До" size="md" type="time" />
+            </HStack> */}
           </FormControl>
           <Center height="12px" />
 
@@ -146,11 +186,18 @@ const EmployeeWorkdayPage: FC<EmployeeWorkdayPageProps> = () => {
                 id="from"
                 placeholder="От"
                 size="md"
-                type="datetime-local"
+                type="time"
+                {...register("date_dop_smena_from")}
               />
               <FormLabel htmlFor="to">До</FormLabel>
 
-              <Input id="to" placeholder="До" size="md" type="datetime-local" />
+              <Input
+                id="to"
+                placeholder="До"
+                size="md"
+                type="time"
+                {...register("date_dop_smena_to")}
+              />
             </HStack>
           </FormControl>
           <Center height="12px" />
@@ -169,11 +216,18 @@ const EmployeeWorkdayPage: FC<EmployeeWorkdayPageProps> = () => {
                 id="from"
                 placeholder="От"
                 size="md"
-                type="datetime-local"
+                type="time"
+                {...register("date_ucheba_from")}
               />
               <FormLabel htmlFor="to">До</FormLabel>
 
-              <Input id="to" placeholder="До" size="md" type="datetime-local" />
+              <Input
+                id="to"
+                placeholder="До"
+                size="md"
+                type="time"
+                {...register("date_ucheba_to")}
+              />
             </HStack>
           </FormControl>
           <Center height="12px" />
@@ -195,11 +249,18 @@ const EmployeeWorkdayPage: FC<EmployeeWorkdayPageProps> = () => {
                 id="from"
                 placeholder="От"
                 size="md"
-                type="datetime-local"
+                type="time"
+                {...register("date_change_from")}
               />
               <FormLabel htmlFor="to">До</FormLabel>
 
-              <Input id="to" placeholder="До" size="md" type="datetime-local" />
+              <Input
+                id="to"
+                placeholder="До"
+                size="md"
+                type="time"
+                {...register("date_change_to")}
+              />
             </HStack>
           </FormControl>
           <Center height="12px" />
@@ -220,11 +281,18 @@ const EmployeeWorkdayPage: FC<EmployeeWorkdayPageProps> = () => {
                 id="from"
                 placeholder="От"
                 size="md"
-                type="datetime-local"
+                type="time"
+                {...register("intern_from")}
               />
               <FormLabel htmlFor="to">До</FormLabel>
 
-              <Input id="to" placeholder="До" size="md" type="datetime-local" />
+              <Input
+                id="to"
+                placeholder="До"
+                size="md"
+                type="time"
+                {...register("intern_to")}
+              />
             </HStack>
           </FormControl>
           <Center height="12px" />

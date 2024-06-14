@@ -22,16 +22,24 @@ import {
   NumberDecrementStepper,
   useToast,
   Skeleton,
+  Spinner,
+  Divider,
+  Badge,
 } from "@chakra-ui/react";
 import { Controller, useForm } from "react-hook-form";
 import { EmployeePopoverForm } from "../employeesPopover/EmployeesPopover";
 import { LuggagePopoverForm } from "../luggagePopover/LuggagePopover";
 import { Detail } from "../../orders.types";
 import {
+  useGetCategoriesQuery,
   useGetOrdersStatusesQuery,
   useLazySetOrderQuery,
   useUpdateOrderMutation,
 } from "../../orders.api";
+import {
+  useGetStationsQuery,
+  useLazyGetPathQuery,
+} from "~/shared/api/subway.api";
 
 interface OrderFormProps {
   options?: Detail;
@@ -47,6 +55,7 @@ const OrderForm: FC<OrderFormProps> = ({
     register,
     formState: { errors, isSubmitting },
     control,
+    getValues,
   } = useForm({
     defaultValues: options
       ? options
@@ -85,6 +94,25 @@ const OrderForm: FC<OrderFormProps> = ({
     isSuccess: isSuccessStatuses,
     isError: isErrorStatuses,
   } = useGetOrdersStatusesQuery();
+
+  const {
+    data: dataCategories,
+    isLoading: isLoadingCategories,
+    isSuccess: isSuccessCategories,
+    isError: isErrorCategories,
+  } = useGetCategoriesQuery();
+
+  const {
+    data: dataStations,
+    isLoading: isLoadingStations,
+    isSuccess: isSuccessStations,
+    isError: isErrorStations,
+  } = useGetStationsQuery();
+
+  const [
+    sendPathRequest,
+    { data: dataPath, isSuccess: isSuccessPath, isFetching: isFetchingPath },
+  ] = useLazyGetPathQuery();
 
   async function onSubmit(body: Detail) {
     if (onClickSubmit) {
@@ -140,6 +168,19 @@ const OrderForm: FC<OrderFormProps> = ({
       });
   }, [isSuccessSet, isErrorSet, isSuccessUpdate, isErrorUpdate]);
 
+  const handlerStationsChange = () => {
+    const st1 = getValues("id_st1");
+    const st2 = getValues("id_st2");
+    if (st1.length > 0 && st2.length > 0) {
+      sendPathRequest({
+        from: st1,
+        to: st2,
+      });
+      console.log(st1);
+      console.log(st2);
+    }
+  };
+
   return (
     <Center w="100vw">
       <Box
@@ -151,7 +192,7 @@ const OrderForm: FC<OrderFormProps> = ({
         boxShadow="0 0 1em rgb(1 1 1 / 10%)"
       >
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl isInvalid={Boolean(errors.name)}>
+          <FormControl isInvalid={Boolean(errors.id_pas)}>
             <FormLabel htmlFor="id_pas">Пассажир</FormLabel>
             <Input
               id="id_pas"
@@ -173,38 +214,62 @@ const OrderForm: FC<OrderFormProps> = ({
           <FormLabel>Cтанции отправления-прибытия</FormLabel>
           <Flex flexDir="row" gap={4}>
             <FormControl>
-              <Controller
-                control={control}
-                name="id_st1"
-                render={({ field: { onChange, value } }) => (
-                  <Select
-                    placeholder="Откуда"
-                    onChange={(value) => onChange(value)}
-                    value={value}
-                  >
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
-                  </Select>
-                )}
-              />
+              <FormLabel>Откуда</FormLabel>
+
+              {isSuccessCategories && (
+                <Controller
+                  control={control}
+                  name="id_st1"
+                  render={({ field: { onChange, value } }) => (
+                    <Skeleton isLoaded={!isLoadingStations}>
+                      <Select
+                        onChange={(value) => {
+                          onChange(value);
+                          handlerStationsChange();
+                        }}
+                        value={value}
+                      >
+                        {isSuccessStations &&
+                          dataStations.responseObject.map((obj) => (
+                            <option value={obj.node_id}>
+                              {obj.station_name}
+                            </option>
+                          ))}
+                      </Select>
+                    </Skeleton>
+                  )}
+                />
+              )}
+              {isErrorStations && <Text>Не удалось получить</Text>}
             </FormControl>
             <FormControl>
-              <Controller
-                control={control}
-                name="id_st2"
-                render={({ field: { onChange, value } }) => (
-                  <Select
-                    placeholder="Куда"
-                    onChange={(value) => onChange(value)}
-                    value={value}
-                  >
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
-                  </Select>
-                )}
-              />
+              <FormLabel>Куда</FormLabel>
+
+              {isSuccessCategories && (
+                <Controller
+                  control={control}
+                  name="id_st2"
+                  render={({ field: { onChange, value } }) => (
+                    <Skeleton isLoaded={!isLoadingStations}>
+                      <Select
+                        onChange={(value) => {
+                          onChange(value);
+                          handlerStationsChange();
+                        }}
+                        value={value}
+                      >
+                        {isSuccessStations &&
+                          dataStations.responseObject.map((obj) => (
+                            <option value={obj.node_id}>
+                              {obj.station_name}
+                            </option>
+                          ))}
+                      </Select>
+                    </Skeleton>
+                  )}
+                />
+              )}
+              {isErrorStations && <Text>Не удалось получить</Text>}
             </FormControl>
           </Flex>
           <Center height="12px" />
@@ -236,7 +301,15 @@ const OrderForm: FC<OrderFormProps> = ({
           </RadioGroup>
           <Center height="12px" />
           <FormLabel>Пересадки</FormLabel>
-          <Text>"Маршрут"</Text>
+          {isFetchingPath && <Spinner colorScheme="red" />}
+          <Flex direction="row" gap="4px">
+            {dataPath &&
+              isSuccessPath &&
+              dataPath?.responseObject &&
+              dataPath?.responseObject.stations.map((obj) => (
+                <Badge key={obj.station_name}>{obj.station_name}</Badge>
+              ))}
+          </Flex>
           <Center height="12px" />
           <FormLabel>
             Выбор вокзалов, с которых мы можем встретить пассажира
@@ -262,11 +335,25 @@ const OrderForm: FC<OrderFormProps> = ({
           <Center height="12px" />
           <FormLabel>Категория заявки</FormLabel>
           <FormControl>
-            <Select placeholder="Категория">
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-              <option value="option3">Option 3</option>
-            </Select>
+            {isSuccessCategories && (
+              <Controller
+                control={control}
+                name="cat_pas"
+                render={({ field: { onChange, value } }) => (
+                  <Skeleton isLoaded={!isLoadingCategories}>
+                    <Select onChange={(value) => onChange(value)} value={value}>
+                      {isSuccessCategories &&
+                        dataCategories.document.details.map((category) => (
+                          <option value={category.category}>
+                            {category.category}
+                          </option>
+                        ))}
+                    </Select>
+                  </Skeleton>
+                )}
+              />
+            )}
+            {isErrorCategories && <Text>Не удалось получить</Text>}
           </FormControl>
           <Center height="12px" />
           <FormLabel>Количество выделенных сотрудников (женщин)</FormLabel>

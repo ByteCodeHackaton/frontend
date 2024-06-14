@@ -38,3 +38,16 @@ export interface IStatusesRootInterface {
     id: string;
     state: string;
   }
+
+  export interface ICategoryRootInterface {
+    document: ICategoryDocument;
+  }
+  
+  export interface ICategoryDocument {
+    details: ICategoryDetail[];
+  }
+  
+  export interface ICategoryDetail {
+    id: string;
+    category: string;
+  }

@@ -1,4 +1,4 @@
-import { Card, CardBody, Flex, HStack, Text } from "@chakra-ui/react";
+import { Card, CardBody, Flex, HStack, Stack, Text } from "@chakra-ui/react";
 import { FC } from "react";
 import { Detail, RootInterface } from "./orders.types";
 import { OrdersModal } from "./orders.modal";
@@ -17,9 +17,13 @@ const OrdersCard: FC<OrdersCardProps> = ({ detail }) => {
     <Card>
       <CardBody>
         <HStack justifyContent="space-between">
-          <Text>
-            {detail.id_st1}-{detail.id_st2}
-          </Text>
+          <Stack>
+            <Text>ID заявки:{detail.id}</Text>
+            <Text>Дата:{detail.datetime}</Text>
+            <Text>Статус:{detail.status}</Text>
+            <Text>Станция отправления:{detail.id_st1}</Text>
+            <Text>Станция назначения:{detail.id_st2}</Text>
+          </Stack>
           <HStack>
             <OrdersModal options={detail} />
             <OrdersDeleteModal options={detail} />

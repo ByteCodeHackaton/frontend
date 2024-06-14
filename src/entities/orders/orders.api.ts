@@ -1,5 +1,5 @@
 import { apiSlice } from "~/shared/api/apiSlice"
-import { Detail, IStatusesRootInterface, RootInterface } from "./orders.types"
+import { Detail, ICategoryRootInterface, IStatusesRootInterface, RootInterface } from "./orders.types"
 
 export const ordersApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
@@ -52,9 +52,15 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ['Orders']
         }),
-        getOrdersStatuses: builder.query<IStatusesRootInterface, any>({
+        getOrdersStatuses: builder.query<IStatusesRootInterface, void>({
             query: () => ({
                 url: '/db_service/api/v1/order/state/list',
+                method: 'GET',
+            })
+        }),
+        getCategories: builder.query<ICategoryRootInterface, void>({
+            query: () => ({
+                url: '/db_service/api/v1/category/list',
                 method: 'GET',
             })
         }),
@@ -62,5 +68,5 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
 })
 
 export const {
-    useGetOrdersQuery, useLazySetOrderQuery, useDeleteOrderMutation, useUpdateOrderMutation, useGetOrdersStatusesQuery
+    useGetOrdersQuery, useLazySetOrderQuery, useDeleteOrderMutation, useUpdateOrderMutation, useGetOrdersStatusesQuery, useGetCategoriesQuery
 } = ordersApiSlice 

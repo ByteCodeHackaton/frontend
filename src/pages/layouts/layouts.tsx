@@ -24,6 +24,7 @@ import { SlMenu } from "react-icons/sl";
 import { useDispatch, useSelector } from "react-redux";
 import {
   logOut,
+  selectCurrentFio,
   selectCurrentRole,
   selectCurrentToken,
   selectCurrentUser,
@@ -58,7 +59,7 @@ function UserNavigation() {
   //   const { data: user } = useSuspenseQuery();
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen((prev) => !prev);
-  const role = useSelector(selectCurrentRole);
+  const fio = useSelector(selectCurrentFio);
   const token = useSelector(selectCurrentToken);
   const dispatch = useDispatch();
 
@@ -84,7 +85,7 @@ function UserNavigation() {
             display={{ base: "flex", md: "none" }}
           />
           <HStack>
-            {role && <Text>{role}</Text>}
+            {fio && <Text>{fio}</Text>}
 
             {!token ? (
               <NavLink to={pathKeys.login()}>

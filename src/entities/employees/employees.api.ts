@@ -1,5 +1,5 @@
 import { apiSlice } from "~/shared/api/apiSlice"
-import { Detail, IRanksRoot, RootInterface } from "./employees.types"
+import { Detail, IRanksRoot, IWorkday, RootInterface } from "./employees.types"
 
 export const employeesApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
@@ -56,9 +56,16 @@ export const employeesApiSlice = apiSlice.injectEndpoints({
                 method: 'GET',
             })
         }),
+        setWorkday: builder.query<any, IWorkday>({
+            query: (body) => ({
+                url: '/db_service/api/v1/workday/set',
+                method: 'POST',
+                body
+            })
+        }),
     })
 })
 
 export const {
-    useGetEmployeesQuery, useLazySetEmployeeQuery, useGetEmployeeRanksQuery, useDeleteEmployeeMutation, useUpdateEmployeeMutation
+    useGetEmployeesQuery, useLazySetEmployeeQuery, useGetEmployeeRanksQuery, useDeleteEmployeeMutation, useUpdateEmployeeMutation, useLazySetWorkdayQuery
 } = employeesApiSlice 

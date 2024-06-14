@@ -8,7 +8,7 @@ import {
   Box,
   Center,
   Heading,
-  Text,
+  useToast,
 } from "@chakra-ui/react";
 import { useLoginMutation } from "~/shared/lib/react-redux/slices/authApiSlice";
 import { useDispatch } from "react-redux";
@@ -25,6 +25,7 @@ const LoginPage = () => {
   const [login] = useLoginMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const toast = useToast();
 
   const onSubmit = async (values, event: Event) => {
     event.preventDefault();
@@ -40,16 +41,13 @@ const LoginPage = () => {
       dispatch(setCredentials({ ...userData, user: values.user }));
       navigate("/");
     } catch (err) {
-      console.log(err);
+      toast({
+        title: err.data,
+        status: "error",
+        isClosable: true,
+      });
     }
   };
-  // return new Promise((resolve) => {
-  //   setTimeout(() => {
-  //     alert(JSON.stringify(values, null, 2));
-  //     resolve();
-  //   }, 3000);
-  // });
-  // }
 
   return (
     <Center h="calc(100vh - 300px)" w="100vw" position="static">
@@ -113,7 +111,6 @@ const LoginPage = () => {
           </Center>
         </form>
       </Box>
-      {isSubmitting && <Text>isSubmitting</Text>}
     </Center>
   );
 };

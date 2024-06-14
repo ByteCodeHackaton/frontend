@@ -41,3 +41,15 @@ export interface RootInterface {
     id: string;
     rank: string;
   }
+
+  export interface IWorkday {
+      id: string,
+      employee_id: string,
+      date_work: string,
+      time_work: string,
+      state_wd: string,
+      date_dop_smena: string,
+      date_ucheba: string,
+      date_change: string,
+      intern: string
+  }
