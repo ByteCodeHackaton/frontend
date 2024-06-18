@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Card,
   CardBody,
   CardHeader,
@@ -14,6 +15,7 @@ import { FC } from "react";
 import { Detail, RootInterface } from "./orders.types";
 import { OrdersModal } from "./orders.modal";
 import { OrdersDeleteModal } from "./ordersClose.modal";
+import { OrdersActiveModal } from "./ordersActive";
 
 interface OrdersListProps {
   options: RootInterface;

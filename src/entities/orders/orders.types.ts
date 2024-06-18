@@ -51,3 +51,48 @@ export interface IStatusesRootInterface {
     id: string;
     category: string;
   }
+
+  export interface IActiveRootInterface {
+    success: boolean;
+    message: string;
+    responseObject: IActiveResponseObject;
+  }
+
+  export interface IActiveGetRootInterface {
+    success: boolean;
+    message: string;
+    responseObject: IActiveResponseObject[];
+  }
+  
+  
+  export interface IActiveResponseObject {
+    id: string;
+    fio: string;
+    request_date: string;
+    path_from: string;
+    path_to: string;
+    average_path_time: number;
+    note: string;
+    place?: any;
+    start_work: string;
+    end_work: string;
+    employess: string[];
+  }
+
+  export interface IBodyRootInterface {
+
+    id: string;
+  
+    fio: string;
+  
+    path_from: string;
+  
+    path_to: string;
+  
+    request_date: string;
+  
+    note: string;
+  
+    employees_count: number;
+  
+  }

@@ -1,5 +1,5 @@
 import { apiSlice } from "~/shared/api/apiSlice"
-import { Detail, ICategoryRootInterface, IStatusesRootInterface, RootInterface } from "./orders.types"
+import { Detail, IActiveGetRootInterface, IActiveRootInterface, IBodyRootInterface, ICategoryRootInterface, IStatusesRootInterface, RootInterface } from "./orders.types"
 
 export const ordersApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
@@ -64,9 +64,22 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
                 method: 'GET',
             })
         }),
+        setActive: builder.query<IActiveRootInterface, IBodyRootInterface>({
+            query: (body) => ({
+                url: '/orders_service/orders/request ',
+                method: 'POST',
+                body
+            })
+        }),
+        getActive: builder.query<IActiveGetRootInterface, void>({
+            query: () => ({
+                url: '/orders_service/orders',
+                method: 'GET',
+            })
+        }),
     })
 })
 
 export const {
-    useGetOrdersQuery, useLazySetOrderQuery, useDeleteOrderMutation, useUpdateOrderMutation, useGetOrdersStatusesQuery, useGetCategoriesQuery
+    useGetOrdersQuery, useLazySetOrderQuery, useDeleteOrderMutation, useUpdateOrderMutation, useGetOrdersStatusesQuery, useGetCategoriesQuery, useLazySetActiveQuery, useGetActiveQuery
 } = ordersApiSlice 

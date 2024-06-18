@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   FormErrorMessage,
   FormLabel,
@@ -40,6 +40,8 @@ import {
   useGetStationsQuery,
   useLazyGetPathQuery,
 } from "~/shared/api/subway.api";
+import { useGetEmployeesQuery } from "~/entities/employees/employees.api";
+import { OrdersActiveModal } from "../../ordersActive";
 
 interface OrderFormProps {
   options?: Detail;
@@ -180,6 +182,12 @@ const OrderForm: FC<OrderFormProps> = ({
       console.log(st2);
     }
   };
+
+  const [values, setValues] = useState(getValues());
+
+  useEffect(() => {
+    setValues(getValues());
+  }, [getValues]);
 
   return (
     <Center w="100vw">
@@ -437,7 +445,8 @@ const OrderForm: FC<OrderFormProps> = ({
             size="md"
           />
           <Center height="12px" />
-          <EmployeePopoverForm />
+          {/* <EmployeePopoverForm /> */}
+          <OrdersActiveModal options={values} />
 
           <Center>
             <Button

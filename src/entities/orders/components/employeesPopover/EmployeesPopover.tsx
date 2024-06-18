@@ -1,11 +1,17 @@
 import {
   Button,
+  Card,
+  CardBody,
   Center,
   FormControl,
   Input,
   List,
   ListIcon,
   ListItem,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -17,7 +23,11 @@ import {
   useControllableState,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import { MdCheckCircle } from "react-icons/md";
+import { useGetEmployeesQuery } from "~/entities/employees/employees.api";
+import { useLazySetActiveQuery } from "../../orders.api";
+import { Detail } from "~/entities/employees/employees.types";
 
 const Form = ({
   onCancel,
@@ -28,18 +38,38 @@ const Form = ({
   setEmployees: React.Dispatch<React.SetStateAction<string[]>>;
   employees: string[];
 }) => {
+  const { data, isLoading, isSuccess, isError, error } = useGetEmployeesQuery({
+    limit: 5,
+    off: 0,
+  });
+  const [
+    sendPathRequest,
+    { data: dataPath, isSuccess: isSuccessPath, isFetching: isFetchingPath },
+  ] = useLazySetActiveQuery();
+  const onAddEmployee = (e: Detail) => {
+    sendPathRequest({
+      fio: e.id,
+      id: e.id,
+      employees_count: 1,
+      note: "",
+      path_from: "",
+      path_to: "",
+      request_date: "",
+    });
+  };
+
   return (
     <PopoverBody>
-      <Input id="employee" placeholder="ФИО сотрудника" autoComplete="on" />
-      <Center height="12px" />
-
-      <FormControl>
-        <Select placeholder="Участок обслуживания">
-          <option value="option1">Option 1</option>
-          <option value="option2">Option 2</option>
-          <option value="option3">Option 3</option>
+      {
+        <Select>
+          {data.document.details.map((obj) => (
+            <option value={obj.fio} onClick={() => onAddEmployee(obj)}>
+              {obj.fio}
+            </option>
+          ))}
         </Select>
-      </FormControl>
+      }
+      <Center height="12px" />
       <Button
         colorScheme="red"
         mt={4}
