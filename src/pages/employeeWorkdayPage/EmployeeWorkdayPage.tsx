@@ -74,7 +74,7 @@ const EmployeeWorkdayPage: FC<EmployeeWorkdayPageProps> = () => {
     sendSetRequest({
       id: "",
       employee_id: emp?.id || "",
-      date_work: values.date_work,
+      date_work: values.date_work.slice(0, 11) + "00:00:00",
       time_work:
         values.time_work === "my_time"
           ? `${values.time_work_from}-${values.time_work_to}`
