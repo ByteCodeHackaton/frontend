@@ -13,7 +13,12 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Controller, useForm } from "react-hook-form";
-import { useLazySetWorkdayQuery } from "~/entities/employees/employees.api";
+import {
+  useGetEmployeesQuery,
+  useLazySetWorkdayQuery,
+} from "~/entities/employees/employees.api";
+import { useGetStationsQuery } from "~/shared/api/subway.api";
+import { Detail as IDetail } from "~/entities/employees/employees.types";
 
 interface EmployeeWorkdayPageProps {
   className?: string;
@@ -27,6 +32,7 @@ const EmployeeWorkdayPage: FC<EmployeeWorkdayPageProps> = () => {
     control,
   } = useForm();
   const toast = useToast();
+  const [emp, setEmp] = useState<IDetail>();
 
   const [isOther, setIsOther] = useState(false);
   const onChangehandler = (value: string) =>
@@ -36,6 +42,18 @@ const EmployeeWorkdayPage: FC<EmployeeWorkdayPageProps> = () => {
     sendSetRequest,
     { data: dataSet, isSuccess: isSuccessSet, isError: isErrorSet },
   ] = useLazySetWorkdayQuery();
+
+  const {
+    data: dataStations,
+    isLoading: isLoadingStations,
+    isSuccess: isSuccessStations,
+    isError: isErrorStations,
+  } = useGetStationsQuery();
+
+  const { data: dataEmployees } = useGetEmployeesQuery({
+    limit: 20,
+    off: 0,
+  });
 
   useEffect(() => {
     if (isSuccessSet)
@@ -55,13 +73,14 @@ const EmployeeWorkdayPage: FC<EmployeeWorkdayPageProps> = () => {
   const onSubmit = (values) =>
     sendSetRequest({
       id: "",
-      employee_id: "emp",
+      employee_id: emp?.id || "",
       date_work: values.date_work,
       time_work:
         values.time_work === "my_time"
           ? `${values.time_work_from}-${values.time_work_to}`
           : values.time_work,
-      state_wd: `${values.date_dop_smena_from}-${values.date_dop_smena_to}`,
+      state_wd: values.state_wd,
+      // state_wd: `${values.date_dop_smena_from}-${values.date_dop_smena_to}`,
       date_dop_smena: `${values.date_dop_smena_from}-${values.date_dop_smena_to}`,
       date_ucheba: `${values.date_ucheba_from}-${values.date_ucheba_to}`,
       date_change: `${values.date_change_from}-${values.date_change_to}`,
@@ -91,6 +110,16 @@ const EmployeeWorkdayPage: FC<EmployeeWorkdayPageProps> = () => {
               {...register("date_work")}
             />
           </FormControl>
+          <Center height="12px" />
+          <FormLabel>Сотрудник</FormLabel>
+          <Select>
+            {dataEmployees &&
+              dataEmployees.document.details.map((obj) => (
+                <option value={obj.fio} onClick={() => setEmp(obj)}>
+                  {obj.fio}
+                </option>
+              ))}
+          </Select>
           <Center height="12px" />
           <FormControl>
             <FormLabel>Время работы</FormLabel>
@@ -152,9 +181,10 @@ const EmployeeWorkdayPage: FC<EmployeeWorkdayPageProps> = () => {
                   }}
                   value={value}
                 >
-                  <option value="Выходной">Выходной</option>
-                  <option value="Больничный">Больничный</option>
-                  <option value="Отпуск">Отпуск</option>
+                  {isSuccessStations &&
+                    dataStations.responseObject.map((obj) => (
+                      <option value={obj.node_id}>{obj.station_name}</option>
+                    ))}
                 </Select>
               )}
             />

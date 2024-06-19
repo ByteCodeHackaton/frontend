@@ -31,10 +31,12 @@ import { EmployeePopoverForm } from "../employeesPopover/EmployeesPopover";
 import { LuggagePopoverForm } from "../luggagePopover/LuggagePopover";
 import { Detail } from "../../orders.types";
 import {
+  useGetActiveEmployeesQuery,
   useGetCategoriesQuery,
   useGetOrdersStatusesQuery,
   useLazySetOrderQuery,
   useUpdateOrderMutation,
+  useLazySetActiveQuery,
 } from "../../orders.api";
 import {
   useGetStationsQuery,
@@ -77,6 +79,7 @@ const OrderForm: FC<OrderFormProps> = ({
           tpz: "",
         },
   });
+  const [values, setValues] = useState(getValues());
 
   const toast = useToast();
 
@@ -115,6 +118,10 @@ const OrderForm: FC<OrderFormProps> = ({
     sendPathRequest,
     { data: dataPath, isSuccess: isSuccessPath, isFetching: isFetchingPath },
   ] = useLazyGetPathQuery();
+
+  const { data: dataActiveEmployees } = useGetActiveEmployeesQuery({
+    id: values.id,
+  });
 
   async function onSubmit(body: Detail) {
     if (onClickSubmit) {
@@ -170,6 +177,8 @@ const OrderForm: FC<OrderFormProps> = ({
       });
   }, [isSuccessSet, isErrorSet, isSuccessUpdate, isErrorUpdate]);
 
+  const [sendRequest, { data, isSuccess, isError }] = useLazySetActiveQuery();
+
   const handlerStationsChange = () => {
     const st1 = getValues("id_st1");
     const st2 = getValues("id_st2");
@@ -182,8 +191,6 @@ const OrderForm: FC<OrderFormProps> = ({
       console.log(st2);
     }
   };
-
-  const [values, setValues] = useState(getValues());
 
   useEffect(() => {
     setValues(getValues());
@@ -446,7 +453,55 @@ const OrderForm: FC<OrderFormProps> = ({
           />
           <Center height="12px" />
           {/* <EmployeePopoverForm /> */}
-          <OrdersActiveModal options={values} />
+          {/* <OrdersActiveModal options={values} /> */}
+          <Button
+            colorScheme="red"
+            mr={3}
+            onClick={async () => {
+              const res = await sendRequest({
+                fio: "",
+                id: values.id,
+                employees_count:
+                  Number(values.insp_sex_f) + Number(values.insp_sex_m),
+                note: "",
+                path_from: values.id_st1,
+                path_to: values.id_st2,
+                request_date: values.datetime + ":00",
+                // values.datetime.slice(6, 10) +
+                // "-" +
+                // values.datetime.slice(3, 5) +
+                // "-" +
+                // values.datetime.slice(0, 2) +
+                // "T" +
+                // values.datetime.slice(11),
+              }).unwrap();
+              if (!res.success)
+                toast({
+                  title: res.message,
+                  status: "error",
+                  isClosable: true,
+                });
+              if (res.success)
+                toast({
+                  title: res.message,
+                  status: "success",
+                  isClosable: true,
+                });
+            }}
+          >
+            Назначить сотрудников автоматически
+          </Button>
+          {dataActiveEmployees &&
+            dataActiveEmployees.responseObject != null && (
+              <>
+                <Text>
+                  Назначенные сотружники:{" "}
+                  {dataActiveEmployees.responseObject
+                    .map((it) => it.fio)
+                    .join(" ")}
+                </Text>
+              </>
+            )}
 
           <Center>
             <Button

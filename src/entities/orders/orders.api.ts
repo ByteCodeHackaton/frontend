@@ -39,15 +39,15 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
                     time4: body.time4,
                     time_over: body.time_over,
                     tpz: body.tpz,
+                    id: params.id
                   },
-                params: { id: params.id }
             }),
             invalidatesTags: ['Orders']
         }),
         deleteOrder: builder.mutation<any, {id: string}>({
             query: (body) => ({
                 url: '/db_service/api/v1/order/delete',
-                method: 'GET',
+                method: 'DELETE',
                 params: { id: body.id }
             }),
             invalidatesTags: ['Orders']
@@ -77,9 +77,16 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
                 method: 'GET',
             })
         }),
+        getActiveEmployees: builder.query<IActiveGetRootInterface, { id: string }>({
+            query: (params) => ({
+                url: '/orders_service/orders/find',
+                method: 'GET',
+                params
+            })
+        }),
     })
 })
 
 export const {
-    useGetOrdersQuery, useLazySetOrderQuery, useDeleteOrderMutation, useUpdateOrderMutation, useGetOrdersStatusesQuery, useGetCategoriesQuery, useLazySetActiveQuery, useGetActiveQuery
+    useGetOrdersQuery, useLazySetOrderQuery, useDeleteOrderMutation, useUpdateOrderMutation, useGetOrdersStatusesQuery, useGetCategoriesQuery, useLazySetActiveQuery, useGetActiveQuery, useGetActiveEmployeesQuery
 } = ordersApiSlice 

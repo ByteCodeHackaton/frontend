@@ -93,13 +93,16 @@ const OrdersActiveModal: FC<OrdersCloseModalProps> = ({ options }) => {
                   employees_count:
                     Number(options.insp_sex_f) + Number(options.insp_sex_m),
                   note: "",
-                  path_from:
-                    dataStations?.responseObject[Math.floor(Math.random() * 5)]
-                      .node_id,
-                  path_to:
-                    dataStations?.responseObject[Math.floor(Math.random() * 6)]
-                      .node_id,
-                  request_date: String(new Date().toISOString().split(".")[0]),
+                  path_from: options.id_st1,
+                  path_to: options.id_st2,
+                  request_date:
+                    options.datetime.slice(6, 10) +
+                    "-" +
+                    options.datetime.slice(3, 5) +
+                    "-" +
+                    options.datetime.slice(0, 2) +
+                    "T" +
+                    options.datetime.slice(11),
                 });
                 onCloseActive();
               }}

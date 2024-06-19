@@ -23,41 +23,47 @@ const OrderSplitsPage: FC<OrderSplitsPageProps> = () => {
     <Center>
       {isSuccess ? (
         <Gantt
-          tasks={data?.responseObject.map((task) => ({
-            start: new Date(
-              task.start_work.slice(6, 10) +
-                "-" +
-                task.start_work.slice(3, 5) +
-                "-" +
-                task.start_work.slice(0, 2) +
-                task.start_work.slice(10)
-            ),
-            end: new Date(
-              task.start_work.slice(6, 10) +
-                "-" +
-                task.start_work.slice(3, 5) +
-                "-" +
-                task.start_work.slice(0, 2) +
-                task.start_work.slice(10)
-            ),
-            name: `${
-              dataStations?.responseObject.find(
-                (e) => e.node_id === task.path_from
-              )?.station_name
-            }-${
-              dataStations?.responseObject.find(
-                (e) => e.node_id === task.path_to
-              )?.station_name
-            }`,
-            id: String(task.id),
-            type: "task",
-            progress: 0,
-            isDisabled: true,
-            styles: {
-              progressColor: getRandomColor(),
-              progressSelectedColor: getRandomColor(),
-            },
-          }))}
+          tasks={
+            data?.responseObject != null
+              ? data?.responseObject.map((task) => ({
+                  start: new Date(
+                    task.start_work
+                    // task.start_work.slice(6, 10) +
+                    //   "-" +
+                    //   task.start_work.slice(3, 5) +
+                    //   "-" +
+                    //   task.start_work.slice(0, 2) +
+                    //   task.start_work.slice(10)
+                  ),
+                  end: new Date(
+                    task.start_work
+                    // task.start_work.slice(6, 10) +
+                    //   "-" +
+                    //   task.start_work.slice(3, 5) +
+                    //   "-" +
+                    //   task.start_work.slice(0, 2) +
+                    //   task.start_work.slice(10)
+                  ),
+                  name: `${
+                    dataStations?.responseObject.find(
+                      (e) => e.node_id === task.path_from
+                    )?.station_name
+                  }-${
+                    dataStations?.responseObject.find(
+                      (e) => e.node_id === task.path_to
+                    )?.station_name
+                  }`,
+                  id: String(task.id),
+                  type: "task",
+                  progress: 0,
+                  isDisabled: true,
+                  styles: {
+                    progressColor: getRandomColor(),
+                    progressSelectedColor: getRandomColor(),
+                  },
+                }))
+              : []
+          }
           viewMode={ViewMode.Hour}
           locale="rus"
         />
