@@ -123,6 +123,11 @@ const OrderForm: FC<OrderFormProps> = ({
     id: values.id,
   });
 
+  const { data: dataEmployees } = useGetEmployeesQuery({
+    limit: 200,
+    off: 0,
+  });
+
   async function onSubmit(body: Detail) {
     if (onClickSubmit) {
       sendUpdateRequest({
@@ -491,16 +496,21 @@ const OrderForm: FC<OrderFormProps> = ({
           >
             Назначить сотрудников автоматически
           </Button>
+          <Center height="12px" />
+
           {dataActiveEmployees &&
             dataActiveEmployees.responseObject != null && (
-              <>
-                <Text>
-                  Назначенные сотружники:{" "}
-                  {dataActiveEmployees.responseObject
-                    .map((it) => it.fio)
-                    .join(" ")}
-                </Text>
-              </>
+              <Flex gap={5}>
+                Назначенные сотрудники:{" "}
+                {dataActiveEmployees.responseObject.employess.map((it) => (
+                  <Badge>
+                    {
+                      dataEmployees?.document.details.find((e) => e.id === it)
+                        ?.fio
+                    }
+                  </Badge>
+                ))}
+              </Flex>
             )}
 
           <Center>

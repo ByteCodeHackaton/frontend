@@ -77,7 +77,7 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
                 method: 'GET',
             })
         }),
-        getActiveEmployees: builder.query<IActiveGetRootInterface, { id: string }>({
+        getActiveEmployees: builder.query<IActiveRootInterface, { id: string }>({
             query: (params) => ({
                 url: '/orders_service/orders/find',
                 method: 'GET',
